@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -13,13 +11,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import DisplayAlert from "../components/alert";
-
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-import { login } from "../redux/Slice/userSlice";
-
+import { useForm } from "react-hook-form";
+import { GoogleLogin } from "react-google-login";
+import GoogleIcon from "@mui/icons-material/Google";
+import { gapi } from "gapi-script";
+import { useEffect } from "react";
+import { googleSignIn, login } from "../redux/Slice/userSlice";
 
 function Copyright(props) {
   return (
@@ -41,32 +40,54 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const inisialstate = {
-  email: "",
-  password: "",
-};
-
 export const SignIn = () => {
-  const [formValue, setformValue] = useState(inisialstate);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const { error } = useSelector((state) => ({ ...state.user }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handlechange = (e) => {
-    const { name, value } = e.target;
-    setformValue({ ...formValue, [name]: value });
+
+  const handleSubmitForm = (data) => {
+    dispatch(login({ data, navigate }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (formValue.email && formValue.password) {
-      dispatch(login({ formValue, navigate }));
-    }
-    console.log(error);
+  const googleSuccess = (resp) => {
+    const email = resp?.profileObj?.email;
+    const name = resp?.profileObj?.name;
+    const token = resp?.tokenId;
+    const googleId = resp?.googleId;
+    const result = { email, name, token, googleId };
+    dispatch(googleSignIn({ result, navigate }));
+  };
+
+  useEffect(() => {
+    gapi.load("client:auth2", () => {
+      gapi.auth2.init({
+        clientId:
+          "154957696752-7b6n1tjqnk82dj7daphbvqutvld6vv12.apps.googleusercontent.com",
+      });
+    });
+  }, []);
+
+  const googleFailure = (err) => {
+    console.log("I am in error block");
   };
 
   return (
+    
     <ThemeProvider theme={theme}>
-      {error && <DisplayAlert title="error" message={error} vertical="top" horizontal="right"></DisplayAlert>}
+      {error && (
+        <DisplayAlert
+          title="error"
+          message={error}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -77,7 +98,7 @@ export const SignIn = () => {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 3, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -85,7 +106,7 @@ export const SignIn = () => {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(handleSubmitForm)}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -93,12 +114,19 @@ export const SignIn = () => {
               margin="normal"
               required
               fullWidth
-              value={formValue.email}
-              onChange={handlechange}
               label="Email Address"
               name="email"
               autoComplete="email"
               autoFocus
+              {...register("email", {
+                required: "Required Field",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalied Email Address",
+                },
+              })}
+              error={!!errors?.email}
+              helperText={errors?.email ? errors.email.message : null}
             />
             <TextField
               margin="normal"
@@ -107,13 +135,12 @@ export const SignIn = () => {
               name="password"
               label="Password"
               type="password"
-              value={formValue.password}
-              onChange={handlechange}
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              {...register("password", {
+                required: "Required Field",
+              })}
+              error={!!errors?.password}
+              helperText={errors?.password ? errors.password.message : null}
             />
             <Button
               type="submit"
@@ -123,6 +150,26 @@ export const SignIn = () => {
             >
               Sign In
             </Button>
+            <GoogleLogin
+              clientId="154957696752-7b6n1tjqnk82dj7daphbvqutvld6vv12.apps.googleusercontent.com"
+              render={(renderProps) => (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  sx={{ my: 1 }}
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                >
+                  <GoogleIcon sx={{ mr: 1 }} />
+                  Google Sign In
+                </Button>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy={"single_host_origin"}
+            />
+
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -130,7 +177,7 @@ export const SignIn = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

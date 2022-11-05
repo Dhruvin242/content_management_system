@@ -10,8 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState, useEffect } from "react";
-import DisplayAlert from "../components/alert";
+import ResponsiveAppBar from "../components/header";
 
 function Copyright(props) {
   return (
@@ -33,27 +32,10 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const inisialstate = {
-  name: "",
-  email: "",
-  password: "",
-  passwordConfirm: "",
-};
-
 export const SignUp = () => {
-  const [formValue, setformValue] = useState(inisialstate);
-  const [valied, setvalied] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setformValue({ ...formValue, [name]: value });
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    Object.values(formValue).forEach((field) => {
-      if (field === "") setvalied(true);
-    });
+    const data = new FormData(event.currentTarget);
   };
 
   return (
@@ -68,7 +50,7 @@ export const SignUp = () => {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 3, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -83,22 +65,19 @@ export const SignUp = () => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  helperText={valied}
                   required
                   fullWidth
-                  value={formValue.name}
-                  onChange={handleChange}
+                  id="email"
                   label="Full Name"
-                  name="name"
-                  autoComplete="family-name"
+                  name="email"
+                  autoComplete="email"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  value={formValue.email}
-                  onChange={handleChange}
+                  id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
@@ -111,23 +90,11 @@ export const SignUp = () => {
                   name="password"
                   label="Password"
                   type="password"
-                  value={formValue.password}
-                  onChange={handleChange}
+                  id="password"
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="passwordConfirm"
-                  label="Password Confirm"
-                  type="password"
-                  value={formValue.passwordConfirm}
-                  onChange={handleChange}
-                  autoComplete="new-password"
-                />
-              </Grid>
+              <Grid item xs={12}></Grid>
             </Grid>
             <Button
               type="submit"
@@ -139,7 +106,7 @@ export const SignUp = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

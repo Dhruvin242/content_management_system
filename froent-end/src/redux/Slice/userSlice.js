@@ -3,9 +3,9 @@ import * as api from "../api";
 
 export const login = createAsyncThunk(
   "user/login",
-  async ({ formValue, navigate }, { rejectWithValue }) => {
+  async ({ data, navigate }, { rejectWithValue }) => {
     try {
-      const response = await api.LoginAPI(formValue);
+      const response = await api.LoginAPI(data);
       navigate("/");
       return response.data;
     } catch (error) {
@@ -14,13 +14,41 @@ export const login = createAsyncThunk(
   }
 );
 
+export const register = createAsyncThunk(
+  "user/register",
+  async ({ data, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await api.LoginAPI(data);
+      navigate("/");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const googleSignIn = createAsyncThunk(
+  "user/googleSignIn",
+  async ({ result, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await api.googleSignIn(result);
+      navigate("/");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const initialState = {
+  user: null,
+  error: "",
+  loading: false,
+};
+
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    user: null,
-    error: "",
-    loading: false,
-  },
+  initialState,
   reducers: {
     emptyError: (state, action) => {
       state.error = "";
@@ -36,6 +64,30 @@ const userSlice = createSlice({
       state.user = action.payload;
     },
     [login.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    [register.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [register.fulfilled]: (state, action) => {
+      state.loading = false;
+      localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
+      state.user = action.payload;
+    },
+    [register.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    [googleSignIn.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [googleSignIn.fulfilled]: (state, action) => {
+      state.loading = false;
+      localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
+      state.user = action.payload;
+    },
+    [googleSignIn.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },
