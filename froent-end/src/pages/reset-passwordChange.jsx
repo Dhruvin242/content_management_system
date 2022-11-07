@@ -10,15 +10,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { resetChangePassword } from "../redux/Slice/userSlice";
 import DisplayAlert from "../components/alert";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { GoogleLogin } from "react-google-login";
-import GoogleIcon from "@mui/icons-material/Google";
-import { gapi } from "gapi-script";
-import { useEffect } from "react";
-import { googleSignIn, login } from "../redux/Slice/userSlice";
 
 function Copyright(props) {
   return (
@@ -40,7 +36,8 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export const SignIn = () => {
+export const ResetPasswordChange = () => {
+  const { token } = useParams();
   const {
     register,
     handleSubmit,
@@ -48,33 +45,15 @@ export const SignIn = () => {
   } = useForm();
 
   const { error } = useSelector((state) => ({ ...state.user }));
+  const { message } = useSelector((state) => ({ ...state.user.user }));
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmitForm = (data) => {
-    dispatch(login({ data, navigate }));
-  };
-
-  const googleSuccess = (resp) => {
-    const email = resp?.profileObj?.email;
-    const name = resp?.profileObj?.name;
-    const token = resp?.tokenId;
-    const googleId = resp?.googleId;
-    const result = { email, name, token, googleId };
-    dispatch(googleSignIn({ result, navigate }));
-  };
-
-  useEffect(() => {
-    gapi.load("client:auth2", () => {
-      gapi.auth2.init({
-        clientId:
-          "154957696752-7b6n1tjqnk82dj7daphbvqutvld6vv12.apps.googleusercontent.com",
-      });
-    });
-  }, []);
-
-  const googleFailure = (err) => {
-    console.log("I am in error block");
+    if (data.password === data.ConfirmPassword) {
+      dispatch(resetChangePassword({ data, token, navigate }));
+    }
   };
 
   return (
@@ -83,6 +62,15 @@ export const SignIn = () => {
         <DisplayAlert
           title="error"
           message={error}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
+      {console.log(message)}
+      {message && (
+        <DisplayAlert
+          title="success"
+          message={message}
           vertical="top"
           horizontal="right"
         ></DisplayAlert>
@@ -101,7 +89,7 @@ export const SignIn = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Change Password
           </Typography>
           <Box
             component="form"
@@ -109,24 +97,6 @@ export const SignIn = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              {...register("email", {
-                required: "Required Field",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalied Email Address",
-                },
-              })}
-              error={!!errors?.email}
-              helperText={errors?.email ? errors.email.message : null}
-            />
             <TextField
               margin="normal"
               required
@@ -141,40 +111,35 @@ export const SignIn = () => {
               error={!!errors?.password}
               helperText={errors?.password ? errors.password.message : null}
             />
+
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="ConfirmPassword"
+              label="Confirm Password"
+              type="password"
+              autoComplete="current-password"
+              {...register("ConfirmPassword", {
+                required: "Required Field",
+              })}
+              error={!!errors?.ConfirmPassword}
+              helperText={
+                errors?.ConfirmPassword ? errors.ConfirmPassword.message : null
+              }
+            />
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Submit
             </Button>
-            <GoogleLogin
-              clientId="154957696752-7b6n1tjqnk82dj7daphbvqutvld6vv12.apps.googleusercontent.com"
-              render={(renderProps) => (
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  sx={{ my: 1 }}
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                >
-                  <GoogleIcon sx={{ mr: 1 }} />
-                  Google Sign In
-                </Button>
-              )}
-              onSuccess={googleSuccess}
-              onFailure={googleFailure}
-              cookiePolicy={"single_host_origin"}
-            />
 
             <Grid container>
-              <Grid item xs>
-                <Link href="/reset-password" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+              <Grid item xs></Grid>
               <Grid item>
                 <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}

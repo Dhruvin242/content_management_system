@@ -18,7 +18,7 @@ export const register = createAsyncThunk(
   "user/register",
   async ({ data, navigate }, { rejectWithValue }) => {
     try {
-      const response = await api.LoginAPI(data);
+      const response = await api.RegisterAPI(data);
       navigate("/");
       return response.data;
     } catch (error) {
@@ -33,6 +33,31 @@ export const googleSignIn = createAsyncThunk(
     try {
       const response = await api.googleSignIn(result);
       navigate("/");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk(
+  "user/resetPassword",
+  async ({ data }, { rejectWithValue }) => {
+    try {
+      const response = await api.ResetPasswordOTP(data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const resetChangePassword = createAsyncThunk(
+  "user/resetPassword",
+  async ({ data, navigate, token }, { rejectWithValue }) => {
+    try {
+      const response = await api.ResetChangePassword({ data, token });
+      navigate("/login");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -90,6 +115,28 @@ const userSlice = createSlice({
     [googleSignIn.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
+    },
+    [forgotPassword.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [forgotPassword.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+    },
+    [forgotPassword.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    [resetChangePassword.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [resetChangePassword.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+    },
+    [resetChangePassword.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = "Something went wrong";
     },
   },
 });

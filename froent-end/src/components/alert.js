@@ -9,12 +9,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function DisplayAlert(props) {
+const DisplayAlert = (props) => {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
-  const {vertical , horizontal } = props;
-
-
+  const { vertical, horizontal } = props;
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -33,7 +31,7 @@ export default function DisplayAlert(props) {
         open={open}
         autoHideDuration={2500}
         onClose={handleClose}
-        anchorOrigin={{ vertical , horizontal}}
+        anchorOrigin={{ vertical, horizontal }}
       >
         <Alert
           onClose={handleClose}
@@ -45,4 +43,6 @@ export default function DisplayAlert(props) {
       </Snackbar>
     </Stack>
   );
-}
+};
+
+export default DisplayAlert;
