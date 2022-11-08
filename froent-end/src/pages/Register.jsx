@@ -10,7 +10,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ResponsiveAppBar from "../components/header";
+import DisplayAlert from "../components/alert";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { registerUser } from "../redux/Slice/userSlice";
 
 function Copyright(props) {
   return (
@@ -33,13 +37,39 @@ function Copyright(props) {
 const theme = createTheme();
 
 export const SignUp = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const { error } = useSelector((state) => ({ ...state.user }));
+  const { message } = useSelector((state) => ({ ...state.user.user }));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmitForm = (data) => {
+    dispatch(registerUser({ data, navigate }));
   };
 
   return (
     <ThemeProvider theme={theme}>
+      {error && (
+        <DisplayAlert
+          title="error"
+          message={error}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
+      {message && (
+        <DisplayAlert
+          title="success"
+          message={message}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -59,7 +89,7 @@ export const SignUp = () => {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(handleSubmitForm)}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -67,10 +97,15 @@ export const SignUp = () => {
                 <TextField
                   required
                   fullWidth
-                  id="email"
                   label="Full Name"
-                  name="email"
-                  autoComplete="email"
+                  name="name"
+                  autoComplete="name"
+                  autoFocus
+                  {...register("name", {
+                    required: "Required Field",
+                  })}
+                  error={!!errors?.name}
+                  helperText={errors?.name ? errors.name.message : null}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -81,6 +116,16 @@ export const SignUp = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  autoFocus
+                  {...register("email", {
+                    required: "Required Field",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalied Email Address",
+                    },
+                  })}
+                  error={!!errors?.email}
+                  helperText={errors?.email ? errors.email.message : null}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -92,6 +137,12 @@ export const SignUp = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  autoFocus
+                  {...register("password", {
+                    required: "Required Field",
+                  })}
+                  error={!!errors?.password}
+                  helperText={errors?.password ? errors.password.message : null}
                 />
               </Grid>
               <Grid item xs={12}></Grid>

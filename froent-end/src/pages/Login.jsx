@@ -48,11 +48,13 @@ export const SignIn = () => {
   } = useForm();
 
   const { error } = useSelector((state) => ({ ...state.user }));
+  const { message } = useSelector((state) => ({ ...state.user.user }));
+  const user = localStorage.getItem("profile");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmitForm = (data) => {
-    dispatch(login({ data, navigate }));
+    dispatch(login({ data, navigate }));  
   };
 
   const googleSuccess = (resp) => {
@@ -73,6 +75,10 @@ export const SignIn = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (user) navigate("/dashboard");
+  }, []);
+
   const googleFailure = (err) => {
     console.log("I am in error block");
   };
@@ -83,6 +89,14 @@ export const SignIn = () => {
         <DisplayAlert
           title="error"
           message={error}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
+      {message && (
+        <DisplayAlert
+          title="success"
+          message={message}
           vertical="top"
           horizontal="right"
         ></DisplayAlert>

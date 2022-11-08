@@ -5,8 +5,9 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ data, navigate }, { rejectWithValue }) => {
     try {
+      console.log("in this");
       const response = await api.LoginAPI(data);
-      navigate("/");
+      navigate("/dashboard");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -14,12 +15,12 @@ export const login = createAsyncThunk(
   }
 );
 
-export const register = createAsyncThunk(
+export const registerUser = createAsyncThunk(
   "user/register",
   async ({ data, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.RegisterAPI(data);
-      navigate("/");
+      navigate("/login");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -32,7 +33,7 @@ export const googleSignIn = createAsyncThunk(
   async ({ result, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.googleSignIn(result);
-      navigate("/");
+      navigate("/dashboard");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -92,15 +93,15 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     },
-    [register.pending]: (state, action) => {
+    [registerUser.pending]: (state, action) => {
       state.loading = true;
     },
-    [register.fulfilled]: (state, action) => {
+    [registerUser.fulfilled]: (state, action) => {
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
       state.user = action.payload;
     },
-    [register.rejected]: (state, action) => {
+    [registerUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },

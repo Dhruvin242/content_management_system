@@ -1,0 +1,8 @@
+const express = require("express");
+const FolderController = require("../controller/folder.Controller");
+const routes = express.Router();
+const { protect } = require("../controller/user.Controller");
+
+routes.post("/createFolder", protect, FolderController.createFolder);
+
+module.exports = routes;

@@ -66,7 +66,6 @@ export const ResetPasswordChange = () => {
           horizontal="right"
         ></DisplayAlert>
       )}
-      {console.log(message)}
       {message && (
         <DisplayAlert
           title="success"
