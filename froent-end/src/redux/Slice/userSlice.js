@@ -5,7 +5,6 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ data, navigate }, { rejectWithValue }) => {
     try {
-      console.log("in this");
       const response = await api.LoginAPI(data);
       navigate("/dashboard");
       return response.data;

@@ -99,7 +99,7 @@ exports.protect = async (req, res, next) => {
     req.user = loginUser;
     next();
   } catch (error) {
-    catchResponse(res, 500, "Something went wrong...");
+    catchResponse(res, 500, "Something went wrong");
   }
 };
 

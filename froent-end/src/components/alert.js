@@ -4,6 +4,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useDispatch } from "react-redux";
 import { emptyError } from "../redux/Slice/userSlice";
+import { emptyMessages } from "../redux/Slice/fileFolderSlice";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -23,6 +24,7 @@ const DisplayAlert = (props) => {
 
   setTimeout(() => {
     dispatch(emptyError());
+    dispatch(emptyMessages());
   }, 2500);
 
   return (

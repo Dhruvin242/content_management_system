@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import Logout from "@mui/icons-material/Logout";
+import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,10 +17,13 @@ import AccountMenu from "../components/accountMenu";
 import FormDialog from "../components/card";
 import Breadcrumbs from "../components/bread";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import DisplayAlert from "../components/alert";
 import storage from "redux-persist/lib/storage";
+import { getFolders } from "../redux/Slice/fileFolderSlice";
+import BasicCard from "../components/folderCard";
+import FolderComponent from "../components/FolderComponent";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,13 +68,26 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const { error } = useSelector((state) => ({ ...state.user }));
   const { message } = useSelector((state) => ({ ...state.user.user }));
-  const user = localStorage.getItem("profile");
+  const { result } = useSelector((state) => ({ ...state.user.user }));
+  const { user } = useSelector((state) => ({ ...state.user }));
+  const { isLoading } = useSelector((state) => ({ ...state.fileFolders }));
+  const { userFolder } = useSelector((state) => ({ ...state.fileFolders }));
 
+  const userProfile = localStorage.getItem("profile");
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) navigate("/");
+    if (!userProfile) navigate("/");
   }, []);
+
+  useEffect(() => {
+    if (result._id && isLoading) {
+      const token = user.token;
+      dispatch(getFolders(token));
+    }
+  }, [result._id, isLoading]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -231,6 +248,25 @@ export default function PrimarySearchAppBar() {
       {renderMobileMenu}
       {renderMenu}
       <Breadcrumbs />
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        // style={{ minHeight: "100vh" }}
+      >
+        {userFolder.map((folder) => (
+          <Grid item key={folder.name}>
+            <BasicCard
+              type="folder"
+              title={folder.name}
+              sx={{ width: 200, height: 135, ml: 3, mt: 3 }}
+            />
+          </Grid>
+        ))}
+        <Routes>
+          <Route path= "folder/:folderId" element={<FolderComponent></FolderComponent>}></Route>
+        </Routes>
+      </Grid>
       <FormDialog />
     </Box>
   );

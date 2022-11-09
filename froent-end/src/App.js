@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import { ResetPassword } from "./pages/forgot-password";
 import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
-
+import ResponsiveDialog from "./components/resposeDialog";
 
 const App = () => {
   return (
@@ -21,8 +21,8 @@ const App = () => {
             path="/reset-password/change-password/:token"
             element={<ResetPasswordChange />}
           />
-          <Route path="/dashboard" element={<PrimarySearchAppBar />} />
-          {/* <Route path="/temp" element={< />} /> */}
+          <Route path="/dashboard/*" element={<PrimarySearchAppBar />} />
+          <Route path="/temp" element={<ResponsiveDialog />} />
         </Routes>
       </BrowserRouter>
     </div>

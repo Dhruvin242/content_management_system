@@ -4,5 +4,6 @@ const routes = express.Router();
 const { protect } = require("../controller/user.Controller");
 
 routes.post("/createFolder", protect, FolderController.createFolder);
+routes.get("/getFolderByUserId", protect, FolderController.getFolders);
 
 module.exports = routes;

@@ -9,8 +9,11 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { addFolder } from "../redux/Slice/fileFolderSlice";
+import DisplayAlert from "../components/alert";
 
 export default function FormDialog() {
+  const { error } = useSelector((state) => ({ ...state.fileFolders }));
+  const { message } = useSelector((state) => ({ ...state.fileFolders }));
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [foldername, setFoldername] = React.useState("");
@@ -27,43 +30,44 @@ export default function FormDialog() {
     setFoldername(e.target.value);
   };
 
-  const { userFolder, user } = useSelector(
+  const { user } = useSelector(
     (state) => ({
-      userFolder: state.fileFolders.userFolder,
       user: state.user.user,
     }),
     shallowEqual
   );
 
-  const checkFolderAlreadyExists = (name) => {
-    const folderPresent = userFolder.find((folder) => folder.name === name);
-    if (folderPresent) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   const handleCreate = () => {
     if (foldername) {
-      if (!checkFolderAlreadyExists(foldername)) {
-        const data = {
-          createdAt: new Date(),
-          name: foldername,
-          userId: user.result._id,
-          createdBy: user.result.name,
-        };
-        console.log(data);
-        dispatch(addFolder({ data }));
-      } else {
-        alert("Folder already exists");
-      }
+      const body = {
+        name: foldername,
+        path: "root",
+      };
+      const token = user.token;
+      dispatch(addFolder({ body, token }));
     }
     setOpen(false);
   };
 
   return (
     <div>
+       {error && (
+        <DisplayAlert
+          title="error"
+          message={error}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
+      {message && (
+        <DisplayAlert
+          title="success"
+          message={message}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
+
       <Fab
         color="secondary"
         aria-label="add"
