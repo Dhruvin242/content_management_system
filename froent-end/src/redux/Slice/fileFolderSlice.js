@@ -3,7 +3,7 @@ import * as api from "../api";
 
 const initialState = {
   isLoading: true,
-  currentFolder: "",
+  currentFolder: "root",
   userFolder: [],
   userFiles: [],
   error: "",
@@ -16,7 +16,6 @@ export const addFolder = createAsyncThunk(
     try {
       const response = await api.CreateFolderAPI(body, token);
       // navigate("/dashboard");
-      console.log("response", response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -38,6 +37,21 @@ export const getFolders = createAsyncThunk(
   }
 );
 
+export const deleteFolder = createAsyncThunk(
+  "fileFolders/deleteFolder",
+  async ({ body, token }, { rejectWithValue }) => {
+    try {
+      const response = await api.DeleteFolderAPI(body, token);
+      // navigate("/dashboard");
+      console.log("response", response);
+      return response.data;
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const fileFolderSlice = createSlice({
   name: "fileFolders",
   initialState,
@@ -45,6 +59,9 @@ const fileFolderSlice = createSlice({
     emptyMessages: (state, action) => {
       state.error = "";
       state.message = "";
+    },
+    setCurrentFolder: (state, action) => {
+      state.currentFolder = action.payload;
     },
   },
   extraReducers: {
@@ -54,12 +71,10 @@ const fileFolderSlice = createSlice({
     [addFolder.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.userFolder.push(action.payload.result);
-      console.log("action", action);
       state.message = action.payload.message;
     },
     [addFolder.rejected]: (state, action) => {
       state.isLoading = false;
-      console.log(action);
       state.error = action.payload.response.data.message;
     },
     [getFolders.pending]: (state, action) => {
@@ -67,15 +82,27 @@ const fileFolderSlice = createSlice({
     },
     [getFolders.fulfilled]: (state, action) => {
       state.isLoading = false;
-      const newdata = action.payload.data
-      state.userFolder = newdata
+      const newdata = action.payload.data;
+      state.userFolder = newdata;
     },
     [getFolders.rejected]: (state, action) => {
       state.isLoading = false;
-      // state.error = action.payload.response.data.message;
+      state.error = action.payload.response.data.message;
+    },
+    [deleteFolder.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [deleteFolder.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.message = action.payload.message;
+      // state.userFolder = newdata;
+    },
+    [deleteFolder.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.response.data.message;
     },
   },
 });
 
-export const { emptyMessages } = fileFolderSlice.actions;
+export const { emptyMessages, setCurrentFolder } = fileFolderSlice.actions;
 export default fileFolderSlice.reducer;

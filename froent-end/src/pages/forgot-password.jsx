@@ -61,13 +61,11 @@ export const ResetPassword = () => {
   }, [navigateURL]);
 
   const handleSubmitForm = (data) => {
-    console.log("url", navigateURL);
     dispatch(forgotPassword({ data }));
   };
 
   return (
     <Fragment>
-      {console.log("user is", user.user)}
       <ThemeProvider theme={theme}>
         {error && (
           <DisplayAlert

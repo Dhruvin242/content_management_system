@@ -7,8 +7,18 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { deleteFolder } from "../redux/Slice/fileFolderSlice";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 export default function ResponsiveDialog(props) {
+  const dispatch = useDispatch();
+  const { user } = useSelector(
+    (state) => ({
+      user: state.user.user,
+    }),
+    shallowEqual
+  );
+
   const [open, setOpen] = React.useState(true);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -16,6 +26,18 @@ export default function ResponsiveDialog(props) {
   const handleClose = () => {
     setOpen(false);
     props.setResponse(false);
+  };
+
+  const handleDelete = () => {
+    setOpen(false);
+    props.setResponse(false);
+    console.log(props.folderId);
+    const body = {
+      folder: props.folderId,
+    };
+
+    const token = user.token;
+    dispatch(deleteFolder({ body, token }));
   };
 
   return (
@@ -27,7 +49,7 @@ export default function ResponsiveDialog(props) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {"Are you sure you want to delete this folder?"}
+          {`Are you sure you want to delete this ${props.folderName} ? `}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -39,7 +61,7 @@ export default function ResponsiveDialog(props) {
           <Button autoFocus onClick={handleClose}>
             Disagree
           </Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleDelete} autoFocus>
             Agree
           </Button>
         </DialogActions>

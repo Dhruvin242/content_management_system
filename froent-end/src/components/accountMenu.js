@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import storage from "redux-persist/lib/storage";
 
 export default function AccountMenu() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function AccountMenu() {
   };
 
   const handleLogout = (event) => {
+    storage.removeItem("persist:root");
     localStorage.removeItem("profile");
     navigate("/");
   };

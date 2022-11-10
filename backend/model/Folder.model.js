@@ -30,6 +30,15 @@ const folderSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+folderSchema.pre("find", function (next) {
+  this.find({ isDeleted: false });
+  next();
 });
 
 const Folder = mongoose.model("Folder", folderSchema);

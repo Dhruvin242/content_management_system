@@ -30,9 +30,11 @@ export default function FormDialog() {
     setFoldername(e.target.value);
   };
 
-  const { user } = useSelector(
+  const { user, currentFolder, userFolder } = useSelector(
     (state) => ({
       user: state.user.user,
+      currentFolder: state.fileFolders.currentFolder,
+      userFolder: state.fileFolders.userFolders,
     }),
     shallowEqual
   );
@@ -41,8 +43,9 @@ export default function FormDialog() {
     if (foldername) {
       const body = {
         name: foldername,
-        path: "root",
+        path: currentFolder,
       };
+
       const token = user.token;
       dispatch(addFolder({ body, token }));
     }
@@ -51,7 +54,7 @@ export default function FormDialog() {
 
   return (
     <div>
-       {error && (
+      {error && (
         <DisplayAlert
           title="error"
           message={error}

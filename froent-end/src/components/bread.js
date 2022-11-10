@@ -2,7 +2,6 @@ import React from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Breadcrumb = () => {
@@ -11,7 +10,7 @@ const Breadcrumb = () => {
 
   const pathnames = pathname.split("/").filter((x) => x);
   return (
-    <Breadcrumbs sx={{ml : 3 , mt : 3}}aria-label="breadcrumb">
+    <Breadcrumbs sx={{ ml: 3, mt: 3 }} aria-label="breadcrumb">
       {pathnames.length > 0 ? (
         <Link onClick={() => navigate("/")}>Home</Link>
       ) : (

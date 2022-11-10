@@ -6,7 +6,8 @@ import Home from "./pages/Home";
 import { ResetPassword } from "./pages/forgot-password";
 import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
-import ResponsiveDialog from "./components/resposeDialog";
+import FolderComponent from "./components/FolderComponent";
+import DashboardComponent from "./components/dashbordNavbar";
 
 const App = () => {
   return (
@@ -22,7 +23,8 @@ const App = () => {
             element={<ResetPasswordChange />}
           />
           <Route path="/dashboard/*" element={<PrimarySearchAppBar />} />
-          <Route path="/temp" element={<ResponsiveDialog />} />
+          <Route path="/dashboard/folder/:folderId" element={<FolderComponent />} />
+          <Route path="/temp" element={<DashboardComponent />} />
         </Routes>
       </BrowserRouter>
     </div>

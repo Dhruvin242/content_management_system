@@ -29,3 +29,6 @@ export const CreateFolderAPI = (body, token) =>
 
 export const GetFoldersAPI = (token) =>
   authAxios(token).get(`/api/v1/folder/getFolderByUserId`);
+
+export const DeleteFolderAPI = (body, token) =>
+  authAxios(token).post(`/api/v1/folder/deleteFolder`, body);

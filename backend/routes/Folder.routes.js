@@ -5,5 +5,6 @@ const { protect } = require("../controller/user.Controller");
 
 routes.post("/createFolder", protect, FolderController.createFolder);
 routes.get("/getFolderByUserId", protect, FolderController.getFolders);
+routes.post("/deleteFolder", protect, FolderController.deleteFolder);
 
 module.exports = routes;
