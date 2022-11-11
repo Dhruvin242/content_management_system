@@ -19,6 +19,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { gapi } from "gapi-script";
 import { useEffect } from "react";
 import { googleSignIn, login } from "../redux/Slice/userSlice";
+import LinearProgress from "@mui/material/LinearProgress";
 
 function Copyright(props) {
   return (
@@ -41,6 +42,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export const SignIn = () => {
+  const [isLoading, setLoading] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -54,7 +56,10 @@ export const SignIn = () => {
   const navigate = useNavigate();
 
   const handleSubmitForm = (data) => {
-    dispatch(login({ data, navigate }));  
+    setLoading(true);
+    setTimeout(() => {
+      dispatch(login({ data, navigate }));
+    }, 2000);
   };
 
   const googleSuccess = (resp) => {
@@ -114,6 +119,11 @@ export const SignIn = () => {
           <Avatar sx={{ m: 3, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
+          {isLoading && (
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress />
+            </Box>
+          )}
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>

@@ -47,7 +47,9 @@ export default function FormDialog() {
       };
 
       const token = user.token;
-      dispatch(addFolder({ body, token }));
+      setTimeout(() => {
+        dispatch(addFolder({ body, token }));
+      }, 1200);
     }
     setOpen(false);
   };
