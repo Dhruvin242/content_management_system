@@ -3,6 +3,9 @@ import { shallowEqual, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import FormDialog from "./card";
 import DashboardComponent from "./dashbordNavbar";
+import Grid from "@mui/material/Grid";
+import BasicCard from "../components/folderCard";
+
 
 const FolderComponent = () => {
   const { folderId } = useParams();
@@ -19,9 +22,16 @@ const FolderComponent = () => {
     <Fragment>
       <DashboardComponent />
       {childFolders.length > 0 ? (
-        <h1>
-          <p>{JSON.stringify(childFolders)}</p>
-        </h1>
+        childFolders.map((folder) => (
+          <Grid item key={folder?._id}>
+            <BasicCard
+              type="folder"
+              folderID={folder?._id}
+              title={folder?.name}
+              sx={{ width: 200, height: 135, ml: 3, mt: 3 }}
+            />
+          </Grid>
+        ))
       ) : (
         <p className="text-center my-5"> Empty Folder</p>
       )}

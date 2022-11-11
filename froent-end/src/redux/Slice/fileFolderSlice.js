@@ -8,6 +8,7 @@ const initialState = {
   userFiles: [],
   error: "",
   message: "",
+  isDeleted: false,
 };
 
 export const addFolder = createAsyncThunk(
@@ -15,7 +16,6 @@ export const addFolder = createAsyncThunk(
   async ({ body, token }, { rejectWithValue }) => {
     try {
       const response = await api.CreateFolderAPI(body, token);
-      // navigate("/dashboard");
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -28,7 +28,6 @@ export const getFolders = createAsyncThunk(
   async (token, { rejectWithValue }) => {
     try {
       const response = await api.GetFoldersAPI(token);
-      // navigate("/dashboard");
       return response.data;
     } catch (error) {
       console.log("error", error);
@@ -42,9 +41,15 @@ export const deleteFolder = createAsyncThunk(
   async ({ body, token }, { rejectWithValue }) => {
     try {
       const response = await api.DeleteFolderAPI(body, token);
-      // navigate("/dashboard");
-      console.log("response", response);
-      return response.data;
+      if (response.status === 200) {
+        try {
+          const getAfterDelete = await api.GetFoldersAPI(token);
+          return getAfterDelete.data;
+        } catch (error) {
+          console.log("error", error);
+          return rejectWithValue(error);
+        }
+      }
     } catch (error) {
       console.log("error", error);
       return rejectWithValue(error);
@@ -94,8 +99,8 @@ const fileFolderSlice = createSlice({
     },
     [deleteFolder.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.message = action.payload.message;
-      // state.userFolder = newdata;
+      state.userFolder = action.payload.data;
+      // state.message = action.payload.message;
     },
     [deleteFolder.rejected]: (state, action) => {
       state.isLoading = false;

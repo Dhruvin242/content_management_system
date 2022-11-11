@@ -31,11 +31,10 @@ export default function ResponsiveDialog(props) {
   const handleDelete = () => {
     setOpen(false);
     props.setResponse(false);
-    console.log(props.folderId);
+
     const body = {
       folder: props.folderId,
     };
-
     const token = user.token;
     dispatch(deleteFolder({ body, token }));
   };

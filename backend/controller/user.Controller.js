@@ -112,12 +112,11 @@ exports.googleSignIn = async (req, res, next) => {
         _id: oldUser._id.toString(),
         email,
         name,
-        googleId,
       };
+      const token = generateToken(oldUser._id);
       return res.status(200).json({
         result,
         token,
-        googleId,
       });
     }
     try {
@@ -126,11 +125,10 @@ exports.googleSignIn = async (req, res, next) => {
         email,
         name,
       });
-
+      const token = generateToken(result._id);
       res.status(200).json({
         result,
         token,
-        googleId,
       });
     } catch (error) {
       res.status(500).json({

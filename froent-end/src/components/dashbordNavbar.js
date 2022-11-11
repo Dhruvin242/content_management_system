@@ -20,8 +20,6 @@ import DisplayAlert from "../components/alert";
 import storage from "redux-persist/lib/storage";
 import { useEffect } from "react";
 
-
-
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -62,13 +60,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
-
 const DashboardComponent = () => {
   const navigate = useNavigate();
 
   const { error } = useSelector((state) => ({ ...state.user }));
   const { message } = useSelector((state) => ({ ...state.user.user }));
+
+  useEffect(() => {
+    <DisplayAlert
+      title="success"
+      message={message}
+      vertical="top"
+      horizontal="right"
+    ></DisplayAlert>;
+  }, [message]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -173,14 +178,15 @@ const DashboardComponent = () => {
           horizontal="right"
         ></DisplayAlert>
       )}
-      {message && (
+
+      {/* {message && (
         <DisplayAlert
           title="success"
           message={message}
           vertical="top"
           horizontal="right"
         ></DisplayAlert>
-      )}
+      )} */}
       <AppBar position="static">
         <Toolbar>
           <Typography
