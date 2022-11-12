@@ -18,7 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import DisplayAlert from "../components/alert";
 import storage from "redux-persist/lib/storage";
-import { useEffect } from "react";
+import { Button } from "@mui/material";
+import HideOTP from "./hideFolderOTP";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -63,17 +64,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const DashboardComponent = () => {
   const navigate = useNavigate();
 
+  const [hideOTP, sethideOTP] = React.useState(false);
+
   const { error } = useSelector((state) => ({ ...state.user }));
   const { message } = useSelector((state) => ({ ...state.user.user }));
-
-  useEffect(() => {
-    <DisplayAlert
-      title="success"
-      message={message}
-      vertical="top"
-      horizontal="right"
-    ></DisplayAlert>;
-  }, [message]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -102,6 +96,11 @@ const DashboardComponent = () => {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleDoubleClick = () => {
+    console.log("open hiden folders");
+    sethideOTP(true);
   };
 
   const menuId = "primary-search-account-menu";
@@ -178,19 +177,21 @@ const DashboardComponent = () => {
           horizontal="right"
         ></DisplayAlert>
       )}
-
-      {/* {message && (
+      {message && (
         <DisplayAlert
           title="success"
           message={message}
           vertical="top"
           horizontal="right"
         ></DisplayAlert>
-      )} */}
+      )}
+      {hideOTP && <HideOTP sethideOTP={sethideOTP} />}
       <AppBar position="static">
         <Toolbar>
           <Typography
             variant="h6"
+            component={Button}
+            onDoubleClick={handleDoubleClick}
             noWrap
             sx={{
               mr: 2,

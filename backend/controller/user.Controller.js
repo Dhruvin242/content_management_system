@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const Folder = require("../model/Folder.model");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const { mailer } = require("../utils/mailSend");
@@ -196,5 +197,43 @@ exports.resetPassword = async (req, res, next) => {
     res.status(500).json({
       message: "Something went wrong",
     });
+  }
+};
+
+exports.hideCode = async (req, res, next) => {
+  if (!req.body.passcode)
+    return res.status(400).json({ message: "Provide Passcode" });
+
+  try {
+    const hashedCode = crypto
+      .createHash("sha256")
+      .update(req.body.passcode)
+      .digest("hex");
+
+    const checkuser = await User.findOne({
+      email: req.user.email,
+    });
+
+    if (checkuser.hideCode === undefined) {
+      checkuser.hideCode = hashedCode;
+      checkuser.save();
+      return res.status(200).json({ message: "Passcode Registed." });
+    } else {
+      if (checkuser.hideCode === hashedCode) {
+        const folders = await Folder.find({
+          $and: [{ userId: req.user.id }, { isHide: true }],
+        });
+        console.log(folders);
+        return res.status(200).json({
+          message: "Passcode Success",
+          data: folders,
+        });
+      } else {
+        return res.status(200).json({ error: "Wrong Passcode." });
+      }
+    }
+  } catch (error) {
+    catchResponse(res, 500, "Something went wrong...");
+    console.log(error);
   }
 };

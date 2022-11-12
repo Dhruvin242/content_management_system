@@ -34,12 +34,16 @@ const folderSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isHide: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-folderSchema.pre("find", function (next) {
-  this.find({ isDeleted: false });
-  next();
-});
+// folderSchema.pre("find", function (next) {
+//   this.find({ $and: [{ isDeleted: false }, { isHide: false }] });
+//   next();
+// });
 
 const Folder = mongoose.model("Folder", folderSchema);
 

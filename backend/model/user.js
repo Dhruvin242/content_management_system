@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  hideCode: String,
 });
 
 userSchema.pre("save", async function (next) {

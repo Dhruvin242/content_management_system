@@ -7,20 +7,23 @@ import ShareIcon from "@mui/icons-material/Share";
 import IconButton from "@mui/material/IconButton";
 import ResponsiveDialog from "./resposeDialog";
 import FolderIcon from "@mui/icons-material/Folder";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { setCurrentFolder } from "../redux/Slice/fileFolderSlice";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CardHeader from "@mui/material/CardHeader";
+import Avatar from "@mui/material/Avatar";
+import { red } from "@mui/material/colors";
+import CardActions from "@mui/material/CardActions";
+
+import FolderOptions from "./folderOptions";
 
 export default function BasicCard(props) {
+  const [folderOptions, setFolderOption] = React.useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { currentFolder } = useSelector(
-    (state) => ({
-      currentFolder: state.fileFolders.currentFolder,
-    }),
-    shallowEqual
-  );
+
   const [Respose, setResponse] = React.useState(false);
   const handledelete = () => {
     setResponse(true);
@@ -33,6 +36,11 @@ export default function BasicCard(props) {
   }, [pathname]);
 
   const handleshare = () => {};
+
+  const handleFolderOption = () => {
+    setFolderOption(true);
+  };
+
   const handleFolderOpen = (folder) => {
     dispatch(setCurrentFolder(folder));
     navigate(`/dashboard/folder/${folder}`);
@@ -48,6 +56,15 @@ export default function BasicCard(props) {
             folderId={props.folderID}
           />
         )}
+        <CardHeader
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title="Shrimp and Chorizo Paella"
+          subheader="September 14, 2016"
+        />
         <CardContent>
           <Typography>
             {props.type === "folder" && (
@@ -64,12 +81,14 @@ export default function BasicCard(props) {
             {props.title}
           </Typography>
         </CardContent>
-        <IconButton aria-label="share" size="small" onClick={handleshare}>
-          <ShareIcon sx={{ mx: 1 }} />
-        </IconButton>
-        <IconButton aria-label="share" size="small" onClick={handledelete}>
-          <DeleteIcon sx={{ mx: 1 }} />
-        </IconButton>
+        <CardActions disableSpacing>
+          <IconButton aria-label="delete" onClick={handledelete}>
+            <DeleteIcon />
+          </IconButton>
+          <IconButton aria-label="share" onClick={handleshare}>
+            <ShareIcon />
+          </IconButton>
+        </CardActions>
       </Card>
     </React.Fragment>
   );

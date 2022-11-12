@@ -57,6 +57,19 @@ export const deleteFolder = createAsyncThunk(
   }
 );
 
+export const hideFolder = createAsyncThunk(
+  "fileFolders/hideFolder",
+  async ({ data, token }, { rejectWithValue }) => {
+    try {
+      const response = await api.HidePassCodeAPI(data, token);
+      return response.data;
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const fileFolderSlice = createSlice({
   name: "fileFolders",
   initialState,
@@ -103,6 +116,19 @@ const fileFolderSlice = createSlice({
       // state.message = action.payload.message;
     },
     [deleteFolder.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.response.data.message;
+    },
+    [hideFolder.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [hideFolder.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.userFolder = action.payload.data;
+      state.message = action.payload.message;
+      state.error = action.payload.error;
+    },
+    [hideFolder.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
     },

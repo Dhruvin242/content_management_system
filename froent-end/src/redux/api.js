@@ -32,3 +32,7 @@ export const GetFoldersAPI = (token) =>
 
 export const DeleteFolderAPI = (body, token) =>
   authAxios(token).post(`/api/v1/folder/deleteFolder`, body);
+
+export const HidePassCodeAPI = (data, token) => {
+  return authAxios(token).post(`/api/v1/user/registerHideOtp`, data);
+};

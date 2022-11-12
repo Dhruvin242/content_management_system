@@ -37,8 +37,9 @@ exports.createFolder = async (req, res, next) => {
 
 exports.getFolders = async (req, res, next) => {
   try {
-    const folders = await Folder.find({ userId: req.user.id });
-    console.log(folders);
+    const folders = await Folder.find({
+      $and: [{ userId: req.user.id }, { isDeleted: false }, { isHide: false }],
+    });
     return res.status(200).json({
       data: folders,
     });
