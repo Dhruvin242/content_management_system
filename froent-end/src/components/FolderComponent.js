@@ -5,13 +5,18 @@ import FormDialog from "./card";
 import DashboardComponent from "./dashbordNavbar";
 import Grid from "@mui/material/Grid";
 import BasicCard from "../components/folderCard";
+import FileCard from "./fileCard";
+
 
 const FolderComponent = () => {
   const { folderId } = useParams();
-  const { childFolders } = useSelector(
+  const { childFolders, childFiles } = useSelector(
     (state) => ({
       childFolders: state.fileFolders.userFolder.filter(
         (folder) => folder.path === folderId
+      ),
+      childFiles: state.fileFolders.userFiles.filter(
+        (file) => file.path === folderId
       ),
     }),
     shallowEqual
@@ -35,6 +40,26 @@ const FolderComponent = () => {
         ))
       ) : (
         <p className="text-center my-5"> Empty Folder</p>
+      )}
+
+      {/* Checking for files */}
+
+      {childFiles.length > 0 ? (
+        childFiles.map((files) => (
+          <Grid item key={files?._id}>
+            <FileCard
+              type={files?.type}
+              imageURL={files?.url}
+              filecreatedAt={files?.createdAt}
+              fileID={files?._id}
+              title={files?.name}
+              isHide={files?.isHide}
+              sx={{ width: 220, ml: 3, mt: 3 }}
+            />
+          </Grid>
+        ))
+      ) : (
+        <p className="text-center my-5">  </p>
       )}
       <FormDialog />
     </Fragment>

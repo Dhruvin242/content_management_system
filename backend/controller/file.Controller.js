@@ -23,7 +23,7 @@ exports.fileUpload = async (req, res, next) => {
     });
 
     if (checkfile) {
-      return res.status(400).json({ error : "File is already exits" });
+      return res.status(400).json({ error: "File is already exits" });
     }
 
     const uploadedFile = await cloudinary.uploader.upload(req.file.path, {
@@ -31,12 +31,14 @@ exports.fileUpload = async (req, res, next) => {
       resource_type: "auto",
     });
 
-    const { originalname } = req.file;
-    const { secure_url, format } = uploadedFile;
+    console.log(uploadedFile)
+
+    const { originalname, mimetype } = req.file;
+    const { secure_url } = uploadedFile;
 
     const newFile = await File.create({
       name: originalname,
-      type: format,
+      type: mimetype,
       userId: req.user.id,
       createdBy: req.user.name,
       url: secure_url,
@@ -45,10 +47,27 @@ exports.fileUpload = async (req, res, next) => {
     });
 
     return res.status(200).json({
+      newFile,
       message: "File uploaded successfully",
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Can not upload file" });
+  }
+};
+
+exports.GetFiles = async (req, res, next) => {
+  try {
+    const files = await File.find({
+      $and: [{ userId: req.user.id }, { isDeleted: false }, { isHide: false }],
+    });
+
+    return res.status(200).json({
+      data: {
+        files,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Can not get Files" });
   }
 };

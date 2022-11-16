@@ -3,15 +3,17 @@ import Grid from "@mui/material/Grid";
 import FormDialog from "../components/card";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getFolders } from "../redux/Slice/fileFolderSlice";
+import { getFiles, getFolders } from "../redux/Slice/fileFolderSlice";
 import BasicCard from "../components/folderCard";
 import { useNavigate } from "react-router-dom";
 import SkeletonCompenent from "../components/Skeleton";
+import FileCard from "../components/fileCard";
 
 export default function PrimarySearchAppBar() {
   const { result } = useSelector((state) => ({ ...state.user.user }));
   const { user } = useSelector((state) => ({ ...state.user }));
   const { userFolder } = useSelector((state) => ({ ...state.fileFolders }));
+  const { userFiles } = useSelector((state) => ({ ...state.fileFolders }));
   const { isLoading } = useSelector((state) => ({ ...state.fileFolders }));
   const userProfile = localStorage.getItem("profile");
 
@@ -24,12 +26,6 @@ export default function PrimarySearchAppBar() {
     }
   }, []);
 
-  useEffect(() => {
-    if (result?._id) {
-      const token = user.token;
-      dispatch(getFolders(token));
-    }
-  }, []);
 
   return (
     <>
@@ -53,6 +49,26 @@ export default function PrimarySearchAppBar() {
                   folderID={folder?._id}
                   title={folder?.name}
                   isHide={folder?.isHide}
+                  sx={{ width: 220, ml: 3, mt: 3 }}
+                />
+              </Grid>
+            ))
+        )}
+
+        {isLoading ? (
+          <SkeletonCompenent card={9} />
+        ) : (
+          userFiles
+            ?.filter((files) => files.path === "root")
+            ?.map((files) => (
+              <Grid item key={files?._id}>
+                <FileCard
+                  type={files?.type}
+                  imageURL={files?.url}
+                  filecreatedAt={files?.createdAt}
+                  fileID={files?._id}
+                  title={files?.name}
+                  isHide={files?.isHide}
                   sx={{ width: 220, ml: 3, mt: 3 }}
                 />
               </Grid>

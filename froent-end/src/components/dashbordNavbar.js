@@ -15,11 +15,13 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import AccountMenu from "../components/accountMenu";
 import Breadcrumbs from "../components/bread";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DisplayAlert from "../components/alert";
 import storage from "redux-persist/lib/storage";
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import HideOTP from "./hideFolderOTP";
+import Pagination from "@mui/material/Pagination";
+import { getFiles, getFolders } from "../redux/Slice/fileFolderSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -62,9 +64,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const DashboardComponent = () => {
+  const { user } = useSelector((state) => ({ ...state.user }));
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [hideOTP, sethideOTP] = React.useState(false);
+  React.useEffect(() => {
+    if (user) {
+      const token = user.token;
+      dispatch(getFolders(token));
+      dispatch(getFiles(token));
+    }
+  }, []);
 
   const { error } = useSelector((state) => ({ ...state.user }));
   const { message } = useSelector((state) => ({ ...state.user.user }));

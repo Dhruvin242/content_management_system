@@ -33,8 +33,9 @@ export const ResetChangePassword = ({ data, token }) =>
 export const CreateFolderAPI = (body, token) =>
   authAxios(token).post(`/api/v1/folder/createFolder`, body);
 
-export const GetFoldersAPI = (token) =>
-  authAxios(token).get(`/api/v1/folder/getFolderByUserId`);
+export const GetFoldersAPI = (token) => {
+  return authAxios(token).get(`/api/v1/folder/getFolderByUserId`);
+};
 
 export const DeleteFolderAPI = (body, token) =>
   authAxios(token).post(`/api/v1/folder/deleteFolder`, body);
@@ -49,4 +50,8 @@ export const RenameFolderAPI = (body, token) => {
 
 export const UploadFileAPI = (data, config) => {
   return authHeader(config).post(`/api/v1/file/uploadFile`, data);
+};
+
+export const GetFilesAPI = (token) => {
+  return authAxios(token).get(`/api/v1/file/getFiles`);
 };

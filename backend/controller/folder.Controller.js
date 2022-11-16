@@ -48,6 +48,7 @@ exports.getFolders = async (req, res, next) => {
     const folders = await Folder.find({
       $and: [{ userId: req.user.id }, { isDeleted: false }, { isHide: false }],
     });
+
     return res.status(200).json({
       data: folders,
     });
@@ -104,4 +105,3 @@ exports.renameFolder = async (req, res, next) => {
     return res.status(500).json({ error: "Can not Rename Folder" });
   }
 };
-

@@ -10,4 +10,6 @@ routes.post(
   fileController.fileUpload
 );
 
+routes.get("/getFiles", protect, fileController.GetFiles);
+
 module.exports = routes;

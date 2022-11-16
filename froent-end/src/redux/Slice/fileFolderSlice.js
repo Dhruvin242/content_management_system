@@ -107,6 +107,19 @@ export const uploadFile = createAsyncThunk(
   }
 );
 
+export const getFiles = createAsyncThunk(
+  "fileFolders/getFiles",
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await api.GetFilesAPI(token);
+      return response.data;
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const fileFolderSlice = createSlice({
   name: "fileFolders",
   initialState,
@@ -161,7 +174,6 @@ const fileFolderSlice = createSlice({
     },
     [hideFolder.fulfilled]: (state, action) => {
       state.isLoading = false;
-      console.log("action");
       state.userFolder = action.payload.data;
       state.message = action.payload.message;
       state.error = action.payload.error;
@@ -175,7 +187,6 @@ const fileFolderSlice = createSlice({
     },
     [renameFolder.fulfilled]: (state, action) => {
       state.isLoading = false;
-      console.log("action Success", action);
       state.userFolder = action.payload[0].data;
       action.payload[1] === undefined
         ? (state.message = "Renamed Sucessfully")
@@ -184,7 +195,6 @@ const fileFolderSlice = createSlice({
     },
     [renameFolder.rejected]: (state, action) => {
       state.isLoading = false;
-      console.log("action Filed", action);
       state.error = "Connot Rename";
     },
     [uploadFile.pending]: (state, action) => {
@@ -192,12 +202,24 @@ const fileFolderSlice = createSlice({
     },
     [uploadFile.fulfilled]: (state, action) => {
       state.isLoading = false;
-      console.log("action Success", action);
+      state.userFiles.push(action.payload.newFile);
       state.message = "File Upload Successfully";
     },
     [uploadFile.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.error;
+    },
+    [getFiles.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getFiles.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      const newdata = action.payload.data.files;
+      state.userFiles = newdata;
+    },
+    [getFiles.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = "Can not get files";
     },
   },
 });

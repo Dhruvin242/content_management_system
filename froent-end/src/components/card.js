@@ -190,17 +190,17 @@ export default function FormDialog() {
             onDelete={(chip, index) => handleDeleteChip(chip, index)}
           />
         </DialogContent>
-        {/* {previewSource && (
+        {previewSource && (
           <img
             src={previewSource}
-            alt="no image"
+            alt="no preview"
             style={{
               marginLeft: "30px",
               height: "80px",
               width: "80px",
             }}
           />
-        )} */}
+        )}
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleFileUpload}>Upload</Button>

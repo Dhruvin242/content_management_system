@@ -14,7 +14,7 @@ const fileSchema = new mongoose.Schema({
     required: true,
   },
   tags: {
-    type: [String],
+    type: String,
   },
   url: {
     type: String,
