@@ -8,7 +8,6 @@ import BasicCard from "../components/folderCard";
 import { useNavigate } from "react-router-dom";
 import SkeletonCompenent from "../components/Skeleton";
 
-
 export default function PrimarySearchAppBar() {
   const { result } = useSelector((state) => ({ ...state.user.user }));
   const { user } = useSelector((state) => ({ ...state.user }));
@@ -45,15 +44,16 @@ export default function PrimarySearchAppBar() {
           <SkeletonCompenent card={9} />
         ) : (
           userFolder
-            .filter((folder) => folder.path === "root")
-            .map((folder) => (
+            ?.filter((folder) => folder.path === "root")
+            ?.map((folder) => (
               <Grid item key={folder?._id}>
                 <BasicCard
                   type="folder"
+                  foldercreatedAt={folder?.createdAt}
                   folderID={folder?._id}
                   title={folder?.name}
                   isHide={folder?.isHide}
-                  sx={{ maxwidth: 345, ml: 3, mt: 3 }}
+                  sx={{ width: 220, ml: 3, mt: 3 }}
                 />
               </Grid>
             ))

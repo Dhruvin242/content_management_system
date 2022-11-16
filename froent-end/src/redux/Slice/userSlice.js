@@ -90,7 +90,7 @@ const userSlice = createSlice({
     },
     [login.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload.message;
+      state.error = 'Login Failed';
     },
     [registerUser.pending]: (state, action) => {
       state.loading = true;

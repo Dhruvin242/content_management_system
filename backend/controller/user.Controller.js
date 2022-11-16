@@ -229,7 +229,16 @@ exports.hideCode = async (req, res, next) => {
           data: folders,
         });
       } else {
-        return res.status(200).json({ error: "Wrong Passcode." });
+        const folders = await Folder.find({
+          $and: [
+            { userId: req.user.id },
+            { isDeleted: false },
+            { isHide: false },
+          ],
+        });
+        return res
+          .status(200)
+          .json({ data: folders, error: "Wrong Passcode." });
       }
     }
   } catch (error) {

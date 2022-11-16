@@ -70,6 +70,43 @@ export const hideFolder = createAsyncThunk(
   }
 );
 
+export const renameFolder = createAsyncThunk(
+  "fileFolders/renameFolder",
+  async ({ token, body }, { rejectWithValue }) => {
+    try {
+      const response = await api.RenameFolderAPI(body, token);
+      if (response.status === 200) {
+        try {
+          console.log("last res", response.data);
+          let lastRes = response.data?.error;
+          let getAfterDelete = await api.GetFoldersAPI(token);
+          if (lastRes === undefined) return [getAfterDelete.data];
+          return [getAfterDelete.data, lastRes];
+        } catch (error) {
+          console.log("error", error);
+          return rejectWithValue(error);
+        }
+      }
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const uploadFile = createAsyncThunk(
+  "fileFolders/uploadFile",
+  async ({ data, config }, { rejectWithValue }) => {
+    try {
+      const response = await api.UploadFileAPI(data, config);
+      return response.data;
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const fileFolderSlice = createSlice({
   name: "fileFolders",
   initialState,
@@ -124,6 +161,7 @@ const fileFolderSlice = createSlice({
     },
     [hideFolder.fulfilled]: (state, action) => {
       state.isLoading = false;
+      console.log("action");
       state.userFolder = action.payload.data;
       state.message = action.payload.message;
       state.error = action.payload.error;
@@ -131,6 +169,35 @@ const fileFolderSlice = createSlice({
     [hideFolder.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
+    },
+    [renameFolder.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [renameFolder.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log("action Success", action);
+      state.userFolder = action.payload[0].data;
+      action.payload[1] === undefined
+        ? (state.message = "Renamed Sucessfully")
+        : (state.message = "");
+      state.error = action.payload[1];
+    },
+    [renameFolder.rejected]: (state, action) => {
+      state.isLoading = false;
+      console.log("action Filed", action);
+      state.error = "Connot Rename";
+    },
+    [uploadFile.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [uploadFile.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log("action Success", action);
+      state.message = "File Upload Successfully";
+    },
+    [uploadFile.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.response.data.error;
     },
   },
 });

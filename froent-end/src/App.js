@@ -7,7 +7,6 @@ import { ResetPassword } from "./pages/forgot-password";
 import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
 import FolderComponent from "./components/FolderComponent";
-import FolderOptions from "./components/folderOptions";
 
 const App = () => {
   return (
@@ -27,7 +26,7 @@ const App = () => {
             path="/dashboard/folder/:folderId"
             element={<FolderComponent />}
           />
-          <Route path="/temp" element={<FolderOptions />} />
+          {/* <Route path="/temp" element={<FolderOptions />} /> */}
         </Routes>
       </BrowserRouter>
     </div>

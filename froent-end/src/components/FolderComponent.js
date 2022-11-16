@@ -6,7 +6,6 @@ import DashboardComponent from "./dashbordNavbar";
 import Grid from "@mui/material/Grid";
 import BasicCard from "../components/folderCard";
 
-
 const FolderComponent = () => {
   const { folderId } = useParams();
   const { childFolders } = useSelector(
@@ -26,9 +25,11 @@ const FolderComponent = () => {
           <Grid item key={folder?._id}>
             <BasicCard
               type="folder"
+              foldercreatedAt={folder?.createdAt}
               folderID={folder?._id}
               title={folder?.name}
-              sx={{ width: 200, height: 135, ml: 3, mt: 3 }}
+              isHide={folder?.isHide}
+              sx={{ width: 220, ml: 3, mt: 3 }}
             />
           </Grid>
         ))

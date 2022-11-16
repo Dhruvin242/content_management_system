@@ -10,6 +10,12 @@ const authAxios = (token) =>
     },
   });
 
+const authHeader = (config) =>
+  axios.create({
+    baseURL: "http://localhost:5000",
+    headers: config.headers,
+  });
+
 export const LoginAPI = (formData) => API.post("/api/v1/user/login", formData);
 
 export const RegisterAPI = (formData) =>
@@ -35,4 +41,12 @@ export const DeleteFolderAPI = (body, token) =>
 
 export const HidePassCodeAPI = (data, token) => {
   return authAxios(token).post(`/api/v1/user/registerHideOtp`, data);
+};
+
+export const RenameFolderAPI = (body, token) => {
+  return authAxios(token).post(`/api/v1/folder/renameFolder`, body);
+};
+
+export const UploadFileAPI = (data, config) => {
+  return authHeader(config).post(`/api/v1/file/uploadFile`, data);
 };

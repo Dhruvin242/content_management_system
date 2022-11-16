@@ -1,0 +1,36 @@
+1 - Register / Login : - 
+	User Can register and login there self by providing unique username and password.
+
+2 - Authentication and two-way Authentication.
+	To ensure that the user is valid and he/she has access to their Document Store. 
+
+3 - Option to add, edit, view and delete all the items in our store.
+	User can create Document, view document, update doucument , delete document ,  filter document .
+	Document can in any format like photos , text file , pdf etc..
+
+4 - Share Functionality
+	User can also share their document to other user.
+
+5 - Recetly Deleted
+	Deleted Document store in Recently Deleted and automatically deleted after some time.
+	User can restore their doument if its avaliable in this.
+
+6 - Hide Document
+	User can hide their document.
+
+7 - Download Document
+	Download Document
+
+8 - Document security
+	Provide Extra security by giving pin to paricular document to open and view document.
+
+9 - Profile Update
+	User can update their profile.
+
+10 - Delete Account 
+	Delete user account
+
+11 - Reminder
+	Set reminder on document
+
+I am going to use material-UI for designing

@@ -1,5 +1,13 @@
 const Folder = require("../model/Folder.model");
 
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
+
 exports.createFolder = async (req, res, next) => {
   try {
     if (!req.body.name || !req.body.path) {
@@ -68,3 +76,32 @@ exports.deleteFolder = async (req, res, next) => {
     return res.status(500).json({ message: "Can not delete Folder" });
   }
 };
+
+exports.renameFolder = async (req, res, next) => {
+  try {
+    const filterBody = filterObj(req.body, "name");
+
+    const folder = await Folder.findOne({ name: req.body.name });
+    if (folder) {
+      return res.status(200).json({ error: "Folder is exists" });
+    }
+    const rename = await Folder.findByIdAndUpdate(
+      req.body.folderID,
+      filterBody,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    return res.status(200).json({
+      message: "Renamed Successfully",
+      data: {
+        rename,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Can not Rename Folder" });
+  }
+};
+
