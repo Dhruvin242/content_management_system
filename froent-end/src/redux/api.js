@@ -63,3 +63,7 @@ export const hideFileFolderAPI = (body, token) => {
 export const searchDocumentAPI = (body, token) => {
   return authAxios(token).get(`/api/v1/file/search/${body.searchWord}`);
 };
+
+export const badgeContentAPI = (token) => {
+  return authAxios(token).get(`/api/v1/file/bagdeContent`);
+};

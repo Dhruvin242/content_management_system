@@ -10,6 +10,7 @@ dotenv.config({
 const userRoutes = require("./routes/user.Routes");
 const folderRoutes = require("./routes/Folder.routes");
 const fileRoutes = require("./routes/file.routes");
+const fileShared = require("./routes/shareFile.routes");
 
 app.use(
   express.json({
@@ -27,5 +28,6 @@ app.use(cors());
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/folder", folderRoutes);
 app.use("/api/v1/file", fileRoutes);
+app.use("/api/v1/file", fileShared);
 
 module.exports = app;

@@ -18,13 +18,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayAlert from "../components/alert";
 import storage from "redux-persist/lib/storage";
-import { Button } from "@mui/material";
+import { Badge, Button } from "@mui/material";
 import HideOTP from "./hideFolderOTP";
 import {
   getFiles,
   getFolders,
   searchDocument,
 } from "../redux/Slice/fileFolderSlice";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -239,6 +240,9 @@ const DashboardComponent = () => {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
+          <Badge color="secondary" badgeContent={2}>
+            <NotificationsIcon />
+          </Badge>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <AccountMenu />
           </Box>
