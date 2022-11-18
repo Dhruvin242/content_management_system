@@ -44,7 +44,13 @@ export const deleteFolder = createAsyncThunk(
       if (response.status === 200) {
         try {
           const getAfterDelete = await api.GetFoldersAPI(token);
-          return getAfterDelete.data;
+          if (getAfterDelete.status === 200) {
+            try {
+              const foldersData = getAfterDelete.data;
+              const filesGet = await api.GetFilesAPI(token);
+              return [filesGet.data, foldersData];
+            } catch (error) {}
+          }
         } catch (error) {
           console.log("error", error);
           return rejectWithValue(error);
@@ -120,6 +126,46 @@ export const getFiles = createAsyncThunk(
   }
 );
 
+export const searchDocument = createAsyncThunk(
+  "fileFolders/searchDocument",
+  async ({ body, token }, { rejectWithValue }) => {
+    try {
+      const response = await api.searchDocumentAPI(body, token);
+      return response.data;
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const hideDocument = createAsyncThunk(
+  "fileFolders/hideDocument",
+  async ({ body, token }, { rejectWithValue }) => {
+    try {
+      const response = await api.hideFileFolderAPI(body, token);
+      if (response.status === 200) {
+        try {
+          const getAfterDelete = await api.GetFoldersAPI(token);
+          if (getAfterDelete.status === 200) {
+            try {
+              const foldersData = getAfterDelete.data;
+              const filesGet = await api.GetFilesAPI(token);
+              return [filesGet.data, foldersData];
+            } catch (error) {}
+          }
+        } catch (error) {
+          console.log("error", error);
+          return rejectWithValue(error);
+        }
+      }
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const fileFolderSlice = createSlice({
   name: "fileFolders",
   initialState,
@@ -162,8 +208,9 @@ const fileFolderSlice = createSlice({
     },
     [deleteFolder.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.userFolder = action.payload.data;
-      // state.message = action.payload.message;
+      state.userFolder = action.payload[1].data;
+      state.userFiles = action.payload[0].data.files;
+      state.message = "Deleted Successfully";
     },
     [deleteFolder.rejected]: (state, action) => {
       state.isLoading = false;
@@ -174,7 +221,8 @@ const fileFolderSlice = createSlice({
     },
     [hideFolder.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.userFolder = action.payload.data;
+      state.userFolder = action.payload.folders;
+      state.userFiles = action.payload.files;
       state.message = action.payload.message;
       state.error = action.payload.error;
     },
@@ -220,6 +268,33 @@ const fileFolderSlice = createSlice({
     [getFiles.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = "Can not get files";
+    },
+    [hideDocument.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [hideDocument.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.userFolder = action.payload[1].data;
+      state.userFiles = action.payload[0].data.files;
+      state.message = "Hide Successfully";
+    },
+    [hideDocument.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.response.data.message;
+    },
+    [searchDocument.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [searchDocument.fulfilled]: (state, action) => {
+      console.log(action)
+      state.isLoading = false;
+      state.userFolder = action.payload.folders;
+      state.userFiles = action.payload.files;
+      state.message = action.payload.message;
+    },
+    [searchDocument.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.response.data.message;
     },
   },
 });

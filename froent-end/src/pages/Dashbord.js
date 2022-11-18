@@ -1,23 +1,20 @@
 import DashboardComponent from "../components/dashbordNavbar";
 import Grid from "@mui/material/Grid";
 import FormDialog from "../components/card";
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getFiles, getFolders } from "../redux/Slice/fileFolderSlice";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import BasicCard from "../components/folderCard";
 import { useNavigate } from "react-router-dom";
 import SkeletonCompenent from "../components/Skeleton";
 import FileCard from "../components/fileCard";
+import { Typography } from "@mui/material";
 
 export default function PrimarySearchAppBar() {
-  const { result } = useSelector((state) => ({ ...state.user.user }));
-  const { user } = useSelector((state) => ({ ...state.user }));
   const { userFolder } = useSelector((state) => ({ ...state.fileFolders }));
   const { userFiles } = useSelector((state) => ({ ...state.fileFolders }));
   const { isLoading } = useSelector((state) => ({ ...state.fileFolders }));
   const userProfile = localStorage.getItem("profile");
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +22,6 @@ export default function PrimarySearchAppBar() {
       navigate("/");
     }
   }, []);
-
 
   return (
     <>
@@ -36,6 +32,12 @@ export default function PrimarySearchAppBar() {
         justify="center"
         // style={{ minHeight: "100vh" }}
       >
+        {userFolder.length === 0 && userFiles.length === 0 && (
+          <Grid container direction="column" alignItems="center">
+            <Typography>No data</Typography>
+          </Grid>
+        )}
+
         {isLoading ? (
           <SkeletonCompenent card={9} />
         ) : (

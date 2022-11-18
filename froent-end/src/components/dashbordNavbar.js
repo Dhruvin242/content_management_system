@@ -18,10 +18,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayAlert from "../components/alert";
 import storage from "redux-persist/lib/storage";
-import { Button, Grid } from "@mui/material";
+import { Button } from "@mui/material";
 import HideOTP from "./hideFolderOTP";
-import Pagination from "@mui/material/Pagination";
-import { getFiles, getFolders } from "../redux/Slice/fileFolderSlice";
+import {
+  getFiles,
+  getFolders,
+  searchDocument,
+} from "../redux/Slice/fileFolderSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -110,10 +113,19 @@ const DashboardComponent = () => {
   };
 
   const handleDoubleClick = () => {
-    console.log("open hiden folders");
     sethideOTP(true);
   };
 
+  const handleSearch = (e) => {
+    const body = {
+      searchWord: e.target.value,
+    };
+    const token = user.token;
+    const { searchWord } = body;
+    if (searchWord.length > 0) dispatch(searchDocument({ body, token }));
+    dispatch(getFolders(token));
+    dispatch(getFiles(token));
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -223,6 +235,7 @@ const DashboardComponent = () => {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              onChange={handleSearch}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />

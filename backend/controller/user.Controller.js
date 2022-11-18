@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const Folder = require("../model/Folder.model");
+const File = require("../model/File.model");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const { mailer } = require("../utils/mailSend");
@@ -221,12 +222,25 @@ exports.hideCode = async (req, res, next) => {
     } else {
       if (checkuser.hideCode === hashedCode) {
         const folders = await Folder.find({
-          $and: [{ userId: req.user.id }, { isHide: true }],
+          $and: [
+            { userId: req.user.id },
+            { isHide: true },
+            { isDeleted: false },
+          ],
         });
-        console.log(folders);
+
+        const files = await File.find({
+          $and: [
+            { userId: req.user.id },
+            { isHide: true },
+            { isDeleted: false },
+          ],
+        });
+        console.log(folders, files);
         return res.status(200).json({
           message: "Passcode Success",
-          data: folders,
+          folders,
+          files,
         });
       } else {
         const folders = await Folder.find({

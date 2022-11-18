@@ -9,8 +9,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { deleteFolder } from "../redux/Slice/fileFolderSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { TextField } from "@mui/material";
 
-export default function ResponsiveDialog(props) {
+export default function ShareDialog(props) {
   const dispatch = useDispatch();
   const { user } = useSelector(
     (state) => ({
@@ -25,12 +26,12 @@ export default function ResponsiveDialog(props) {
 
   const handleClose = () => {
     setOpen(false);
-    props.setResponse(false);
+    props.setShareRes(false);
   };
 
   const handleDelete = () => {
     setOpen(false);
-    props.setResponse(false);
+    props.setShareRes(false);
 
     const body = {
       folder: props.folderId || props.fileID,
@@ -48,20 +49,23 @@ export default function ResponsiveDialog(props) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {`Are you sure you want to delete this ${props.folderName} ? `}
+          {`Find Your Friend  `}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Please remove this carefully after deleting you can not recover
-            that.
-          </DialogContentText>
+          <DialogContentText>Enter emailID</DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            fullWidth
+            variant="standard"
+          />
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Disagree
+            Cancel
           </Button>
           <Button onClick={handleDelete} autoFocus>
-            Agree
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

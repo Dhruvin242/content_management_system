@@ -1,4 +1,4 @@
-const Folder = require("../model/File.model");
+const Folder = require("../model/Folder.model");
 const File = require("../model/File.model");
 const multer = require("multer");
 const { cloudinary } = require("../utils/cloudinary");
@@ -31,7 +31,7 @@ exports.fileUpload = async (req, res, next) => {
       resource_type: "auto",
     });
 
-    console.log(uploadedFile)
+    console.log(uploadedFile);
 
     const { originalname, mimetype } = req.file;
     const { secure_url } = uploadedFile;
@@ -69,5 +69,77 @@ exports.GetFiles = async (req, res, next) => {
     });
   } catch (error) {
     return res.status(500).json({ message: "Can not get Files" });
+  }
+};
+
+exports.HideFileFolder = async (req, res, next) => {
+  try {
+    const folder = req.body.folder;
+    if (!folder)
+      return res.status(400).json({ message: "Please provide folder or file" });
+    const folderCheck = await Folder.findById(folder);
+    const fileCheck = await File.findById(folder);
+    if (folderCheck) {
+      folderCheck.isHide = true;
+      folderCheck.save();
+
+      return res.status(200).json({
+        message: "Folder Hide Successfully.!",
+      });
+    }
+
+    if (fileCheck) {
+      fileCheck.isHide = true;
+      fileCheck.save();
+
+      return res.status(200).json({
+        message: "File Hide Successfully.!",
+      });
+    }
+    return res.status(200).json({
+      message: "Folder or File Not found !",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Can not hide Folder or File" });
+  }
+};
+//RegExp(req.query[el])
+exports.search = async (req, res, next) => {
+  try {
+    const { searchWord } = req.params;
+    console.log(searchWord);
+    const folders = await Folder.find({
+      name: new RegExp(searchWord, "i"),
+    });
+    const files = await File.find({
+      $or: [
+        { name: new RegExp(searchWord, "i") },
+        { tags: new RegExp(searchWord, "i") },
+      ],
+    });
+
+    // folder filter
+    const filterData = folders.filter((folder) => {
+      return !folder.isDeleted && !folder.isHide;
+    });
+
+    // file filter
+    const filterFiles = files.filter((file) => {
+      return !file.isDeleted && !file.isHide;
+    });
+
+    if (folders.length === 0 && files.length === 0)
+      return res.status(200).json({
+        message: "No data found",
+        folders: filterData,
+        files: filterFiles,
+      });
+
+    return res.status(200).json({
+      folders: filterData,
+      files: filterFiles,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "No Data Found.." });
   }
 };

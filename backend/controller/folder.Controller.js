@@ -1,4 +1,5 @@
 const Folder = require("../model/Folder.model");
+const File = require("../model/File.model");
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -61,17 +62,28 @@ exports.deleteFolder = async (req, res, next) => {
   try {
     const folder = req.body.folder;
     if (!folder)
-      return res.status(400).json({ message: "Please provide folder" });
+      return res.status(400).json({ message: "Please provide folder or file" });
     const folderCheck = await Folder.findById(folder);
-    if (!folderCheck) {
-      return res.status(404).json({ message: "Folder not found!" });
+    const fileCheck = await File.findById(folder);
+    if (folderCheck) {
+      folderCheck.isDeleted = true;
+      folderCheck.save();
+
+      return res.status(200).json({
+        message: "Folder Deleted Successfully.!",
+      });
     }
 
-    folderCheck.isDeleted = true;
-    folderCheck.save();
+    if (fileCheck) {
+      fileCheck.isDeleted = true;
+      fileCheck.save();
 
+      return res.status(200).json({
+        message: "Folder Deleted Successfully.!",
+      });
+    }
     return res.status(200).json({
-      message: "Folder Deleted Successfully.!",
+      message: "Folder or File Not found !",
     });
   } catch (error) {
     return res.status(500).json({ message: "Can not delete Folder" });

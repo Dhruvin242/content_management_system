@@ -11,5 +11,8 @@ routes.post(
 );
 
 routes.get("/getFiles", protect, fileController.GetFiles);
+routes.get("/search/:searchWord", protect, fileController.search);
+
+routes.post("/hide", protect, fileController.HideFileFolder);
 
 module.exports = routes;

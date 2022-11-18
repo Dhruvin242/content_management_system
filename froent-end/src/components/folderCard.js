@@ -13,7 +13,11 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { renameFolder, setCurrentFolder } from "../redux/Slice/fileFolderSlice";
+import {
+  hideDocument,
+  renameFolder,
+  setCurrentFolder,
+} from "../redux/Slice/fileFolderSlice";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -21,6 +25,7 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { TextField } from "@mui/material";
+import ShareDialog from "./shareDialog";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -40,8 +45,8 @@ export default function BasicCard(props) {
   const { pathname } = useLocation();
   const [expanded, setExpanded] = React.useState(false);
   const [Respose, setResponse] = React.useState(false);
-  const [Editable, setEditable] = React.useState(false);
 
+  const [Editable, setEditable] = React.useState(false);
   const { user } = useSelector(
     (state) => ({
       user: state.user.user,
@@ -69,15 +74,16 @@ export default function BasicCard(props) {
   };
 
   const handlerename = () => {
-    console.log("Rename");
     setEditable(true);
   };
 
-  const handleshare = () => {
-    console.log("Share");
-  };
+  const handleshare = () => {};
   const handlehide = () => {
-    console.log("Hide");
+    const body = {
+      folder: props.folderID,
+    };
+    const token = user.token;
+    dispatch(hideDocument({ body, token }));
   };
 
   const RenameHandle = (e) => {

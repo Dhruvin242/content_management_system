@@ -45,7 +45,7 @@ export const HidePassCodeAPI = (data, token) => {
 };
 
 export const RenameFolderAPI = (body, token) => {
-  return authAxios(token).post(`/api/v1/folder/renameFolder`, body);
+  return authAxios(token).patch(`/api/v1/folder/renameFolder`, body);
 };
 
 export const UploadFileAPI = (data, config) => {
@@ -54,4 +54,12 @@ export const UploadFileAPI = (data, config) => {
 
 export const GetFilesAPI = (token) => {
   return authAxios(token).get(`/api/v1/file/getFiles`);
+};
+
+export const hideFileFolderAPI = (body, token) => {
+  return authAxios(token).post(`/api/v1/file/hide`, body);
+};
+
+export const searchDocumentAPI = (body, token) => {
+  return authAxios(token).get(`/api/v1/file/search/${body.searchWord}`);
 };
