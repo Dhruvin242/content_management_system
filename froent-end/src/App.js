@@ -7,7 +7,7 @@ import { ResetPassword } from "./pages/forgot-password";
 import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
 import FolderComponent from "./components/FolderComponent";
-import FilePreview from "./components/FilePreview";
+import NotificationSharedFiles from "./components/notificationShare.dilog";
 
 const App = () => {
   return (
@@ -27,7 +27,7 @@ const App = () => {
             path="/dashboard/folder/:folderId"
             element={<FolderComponent />}
           />
-          <Route path="/temp" element={<FilePreview />} />
+          <Route path="/temp" element={<NotificationSharedFiles />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -25,6 +25,7 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import PDFPreview from "./pdfPreview";
 import DownloadIcon from "@mui/icons-material/Download";
 import ShareDialog from "./shareDialog";
+import ResponsiveDialog from "./resposeDialog";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -100,11 +101,15 @@ export default function FileCard(props) {
 
   return (
     <React.Fragment>
-      {shareRes && (
-        <ShareDialog
-          setShareRes={setShareRes}
-          fileName={props.title}
+      {Respose && (
+        <ResponsiveDialog
+          setResponse={setResponse}
+          folderName={props.title}
+          folderId={props.fileID}
         />
+      )}
+      {shareRes && (
+        <ShareDialog setShareRes={setShareRes} fileName={props.title} />
       )}
       <Card sx={props.sx}>
         <CardHeader

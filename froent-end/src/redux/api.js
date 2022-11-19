@@ -64,6 +64,14 @@ export const searchDocumentAPI = (body, token) => {
   return authAxios(token).get(`/api/v1/file/search/${body.searchWord}`);
 };
 
+export const shareFileAPI = (body, token) => {
+  return authAxios(token).post(`api/v1/file/sharedFile`, body);
+};
+
 export const badgeContentAPI = (token) => {
   return authAxios(token).get(`/api/v1/file/bagdeContent`);
+};
+
+export const fileStatus = (body, token) => {
+  return authAxios(token).post(`/api/v1/file/resReqFile`, body);
 };

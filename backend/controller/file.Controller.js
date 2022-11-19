@@ -31,8 +31,6 @@ exports.fileUpload = async (req, res, next) => {
       resource_type: "auto",
     });
 
-    console.log(uploadedFile);
-
     const { originalname, mimetype } = req.file;
     const { secure_url } = uploadedFile;
 
@@ -107,14 +105,18 @@ exports.HideFileFolder = async (req, res, next) => {
 exports.search = async (req, res, next) => {
   try {
     const { searchWord } = req.params;
-    console.log(searchWord);
     const folders = await Folder.find({
-      name: new RegExp(searchWord, "i"),
+      $and: [{ userId: req.user.id }, { name: new RegExp(searchWord, "i") }],
     });
     const files = await File.find({
-      $or: [
-        { name: new RegExp(searchWord, "i") },
-        { tags: new RegExp(searchWord, "i") },
+      $and: [
+        { userId: req.user.id },
+        {
+          $or: [
+            { name: new RegExp(searchWord, "i") },
+            { tags: new RegExp(searchWord, "i") },
+          ],
+        },
       ],
     });
 

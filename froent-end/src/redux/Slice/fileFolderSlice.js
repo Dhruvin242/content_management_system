@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../api";
+import { resFileStatus } from "./shareSlice";
 
 const initialState = {
   isLoading: true,
@@ -152,7 +153,10 @@ export const hideDocument = createAsyncThunk(
               const foldersData = getAfterDelete.data;
               const filesGet = await api.GetFilesAPI(token);
               return [filesGet.data, foldersData];
-            } catch (error) {}
+            } catch (error) {
+              console.log("error", error);
+              return rejectWithValue(error);
+            }
           }
         } catch (error) {
           console.log("error", error);
@@ -178,124 +182,130 @@ const fileFolderSlice = createSlice({
       state.currentFolder = action.payload;
     },
   },
-  extraReducers: {
-    [addFolder.pending]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(addFolder.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [addFolder.fulfilled]: (state, action) => {
+    });
+    builder.addCase(addFolder.fulfilled, (state, action) => {
       state.isLoading = false;
       state.userFolder.push(action.payload.result);
       state.message = action.payload.message;
-    },
-    [addFolder.rejected]: (state, action) => {
+    });
+    builder.addCase(addFolder.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
-    },
-    [getFolders.pending]: (state, action) => {
+    });
+    builder.addCase(getFolders.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [getFolders.fulfilled]: (state, action) => {
+    });
+    builder.addCase(getFolders.fulfilled, (state, action) => {
       state.isLoading = false;
       const newdata = action.payload.data;
       state.userFolder = newdata;
-    },
-    [getFolders.rejected]: (state, action) => {
+    });
+    builder.addCase(getFolders.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
-    },
-    [deleteFolder.pending]: (state, action) => {
+    });
+    builder.addCase(deleteFolder.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [deleteFolder.fulfilled]: (state, action) => {
+    });
+    builder.addCase(deleteFolder.fulfilled, (state, action) => {
       state.isLoading = false;
       state.userFolder = action.payload[1].data;
       state.userFiles = action.payload[0].data.files;
       state.message = "Deleted Successfully";
-    },
-    [deleteFolder.rejected]: (state, action) => {
+    });
+    builder.addCase(deleteFolder.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
-    },
-    [hideFolder.pending]: (state, action) => {
+    });
+    builder.addCase(hideFolder.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [hideFolder.fulfilled]: (state, action) => {
+    });
+    builder.addCase(hideFolder.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.userFolder = action.payload.folders;
+      console.log(action);
+      state.userFolder = action.payload.data;
       state.userFiles = action.payload.files;
       state.message = action.payload.message;
       state.error = action.payload.error;
-    },
-    [hideFolder.rejected]: (state, action) => {
+    });
+    builder.addCase(hideFolder.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
-    },
-    [renameFolder.pending]: (state, action) => {
+    });
+    builder.addCase(renameFolder.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [renameFolder.fulfilled]: (state, action) => {
+    });
+    builder.addCase(renameFolder.fulfilled, (state, action) => {
       state.isLoading = false;
       state.userFolder = action.payload[0].data;
       action.payload[1] === undefined
         ? (state.message = "Renamed Sucessfully")
         : (state.message = "");
       state.error = action.payload[1];
-    },
-    [renameFolder.rejected]: (state, action) => {
+    });
+    builder.addCase(renameFolder.rejected, (state, action) => {
       state.isLoading = false;
       state.error = "Connot Rename";
-    },
-    [uploadFile.pending]: (state, action) => {
+    });
+    builder.addCase(uploadFile.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [uploadFile.fulfilled]: (state, action) => {
+    });
+    builder.addCase(uploadFile.fulfilled, (state, action) => {
       state.isLoading = false;
       state.userFiles.push(action.payload.newFile);
       state.message = "File Upload Successfully";
-    },
-    [uploadFile.rejected]: (state, action) => {
+    });
+    builder.addCase(uploadFile.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.error;
-    },
-    [getFiles.pending]: (state, action) => {
+    });
+    builder.addCase(getFiles.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [getFiles.fulfilled]: (state, action) => {
+    });
+    builder.addCase(getFiles.fulfilled, (state, action) => {
       state.isLoading = false;
       const newdata = action.payload.data.files;
       state.userFiles = newdata;
-    },
-    [getFiles.rejected]: (state, action) => {
+    });
+    builder.addCase(getFiles.rejected, (state, action) => {
       state.isLoading = false;
       state.error = "Can not get files";
-    },
-    [hideDocument.pending]: (state, action) => {
+    });
+    builder.addCase(hideDocument.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [hideDocument.fulfilled]: (state, action) => {
+    });
+    builder.addCase(hideDocument.fulfilled, (state, action) => {
       state.isLoading = false;
       state.userFolder = action.payload[1].data;
       state.userFiles = action.payload[0].data.files;
       state.message = "Hide Successfully";
-    },
-    [hideDocument.rejected]: (state, action) => {
+    });
+    builder.addCase(hideDocument.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
-    },
-    [searchDocument.pending]: (state, action) => {
+    });
+    builder.addCase(searchDocument.pending, (state, action) => {
       state.isLoading = true;
-    },
-    [searchDocument.fulfilled]: (state, action) => {
-      console.log(action)
+    });
+    builder.addCase(searchDocument.fulfilled, (state, action) => {
+      console.log(action);
       state.isLoading = false;
       state.userFolder = action.payload.folders;
       state.userFiles = action.payload.files;
       state.message = action.payload.message;
-    },
-    [searchDocument.rejected]: (state, action) => {
+    });
+    builder.addCase(searchDocument.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
-    },
+    });
+    builder.addCase(resFileStatus.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const newdata = action.payload[0].data.files;
+      state.userFiles = newdata;
+    });
   },
 });
 

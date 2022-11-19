@@ -20,12 +20,16 @@ const fileShareSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  sharedUserId: {
-    type: mongoose.Schema.ObjectId,
+  sharedUserEmail: {
+    type: String,
     required: true,
   },
-  receivedUserId: {
-    type: mongoose.Schema.ObjectId,
+  sharedUserName: {
+    type: String,
+    required: true,
+  },
+  receivedUserEmail: {
+    type: String,
     required: true,
   },
   path: {
@@ -46,9 +50,10 @@ const fileShareSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  isAccpected: {
-    type: Boolean,
-    default: false,
+  fileStatus: {
+    type: String,
+    enum: ["Approve", "Denine", "NotFixed"],
+    default: "NotFixed",
   },
 });
 

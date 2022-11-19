@@ -7,20 +7,22 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { deleteFolder } from "../redux/Slice/fileFolderSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { TextField } from "@mui/material";
+import { shareFile } from "../redux/Slice/shareSlice";
+import DisplayAlert from "../components/alert";
 
 export default function ShareDialog(props) {
   const dispatch = useDispatch();
-  const { user } = useSelector(
+  const { data, user } = useSelector(
     (state) => ({
+      data: state.fileFolders.userFiles,
       user: state.user.user,
     }),
     shallowEqual
   );
-
   const [open, setOpen] = React.useState(true);
+  const [userEmail, setUser] = React.useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -29,15 +31,31 @@ export default function ShareDialog(props) {
     props.setShareRes(false);
   };
 
-  const handleDelete = () => {
+  const handlechange = (e) => {
+    setUser(e.target.value);
+  };
+
+  const handleShare = (name) => {
+    const newFile = data.filter((file) => {
+      return file.name === name;
+    });
+    const token = user.token;
+    const body = {
+      name: newFile[0].name,
+      type: newFile[0].type,
+      receivedUserEmail: userEmail,
+      url: newFile[0].url,
+      tags: newFile[0].tags,
+    };
+    dispatch(shareFile({ body, token }));
+    <DisplayAlert
+      title="success"
+      message="File Share Successfully"
+      vertical="top"
+      horizontal="right"
+    ></DisplayAlert>;
     setOpen(false);
     props.setShareRes(false);
-
-    const body = {
-      folder: props.folderId || props.fileID,
-    };
-    const token = user.token;
-    dispatch(deleteFolder({ body, token }));
   };
 
   return (
@@ -54,6 +72,8 @@ export default function ShareDialog(props) {
         <DialogContent>
           <DialogContentText>Enter emailID</DialogContentText>
           <TextField
+            value={userEmail}
+            onChange={handlechange}
             autoFocus
             margin="dense"
             fullWidth
@@ -64,7 +84,7 @@ export default function ShareDialog(props) {
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleDelete} autoFocus>
+          <Button onClick={() => handleShare(props.fileName)} autoFocus>
             Confirm
           </Button>
         </DialogActions>

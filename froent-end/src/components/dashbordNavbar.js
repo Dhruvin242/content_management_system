@@ -15,7 +15,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import AccountMenu from "../components/accountMenu";
 import Breadcrumbs from "../components/bread";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import DisplayAlert from "../components/alert";
 import storage from "redux-persist/lib/storage";
 import { Badge, Button } from "@mui/material";
@@ -26,6 +26,8 @@ import {
   searchDocument,
 } from "../redux/Slice/fileFolderSlice";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { badgeCount } from "../redux/Slice/shareSlice";
+import NotificationSharedFiles from "./notificationShare.dilog";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -78,14 +80,23 @@ const DashboardComponent = () => {
       const token = user.token;
       dispatch(getFolders(token));
       dispatch(getFiles(token));
+      dispatch(badgeCount(token));
     }
   }, []);
 
   const { error } = useSelector((state) => ({ ...state.user }));
   const { message } = useSelector((state) => ({ ...state.user.user }));
 
+  const { shareCount } = useSelector(
+    (state) => ({
+      shareCount: state.shareFiles.shareCount,
+    }),
+    shallowEqual
+  );
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [notificationOpen, setNotificationOpen] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -126,6 +137,10 @@ const DashboardComponent = () => {
     if (searchWord.length > 0) dispatch(searchDocument({ body, token }));
     dispatch(getFolders(token));
     dispatch(getFiles(token));
+  };
+
+  const handleCard = () => {
+    setNotificationOpen(true);
   };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -210,6 +225,7 @@ const DashboardComponent = () => {
         ></DisplayAlert>
       )}
       {hideOTP && <HideOTP sethideOTP={sethideOTP} />}
+      {notificationOpen && <NotificationSharedFiles setNotificationOpen={setNotificationOpen}/>}
       <AppBar position="static">
         <Toolbar>
           <Typography
@@ -240,9 +256,11 @@ const DashboardComponent = () => {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Badge color="secondary" badgeContent={2}>
-            <NotificationsIcon />
-          </Badge>
+          <IconButton onClick={handleCard}>
+            <Badge color="secondary" badgeContent={shareCount}>
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <AccountMenu />
           </Box>
