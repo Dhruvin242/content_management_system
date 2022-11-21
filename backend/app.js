@@ -7,6 +7,10 @@ dotenv.config({
   path: "./config.env",
 });
 
+app.get("/", (req, res) => {
+  res.json("Server Start");
+});
+
 const userRoutes = require("./routes/user.Routes");
 const folderRoutes = require("./routes/Folder.routes");
 const fileRoutes = require("./routes/file.routes");
