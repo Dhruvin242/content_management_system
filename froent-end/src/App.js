@@ -7,9 +7,9 @@ import { ResetPassword } from "./pages/forgot-password";
 import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
 import FolderComponent from "./components/FolderComponent";
-import NotificationSharedFiles from "./components/notificationShare.dilog";
 
 const App = () => {
+  const userProfile = localStorage.getItem("profile");
   return (
     <div className="App">
       <BrowserRouter>
@@ -23,11 +23,12 @@ const App = () => {
             element={<ResetPasswordChange />}
           />
           <Route path="/dashboard/*" element={<PrimarySearchAppBar />} />
-          <Route
-            path="/dashboard/folder/:folderId"
-            element={<FolderComponent />}
-          />
-          <Route path="/temp" element={<NotificationSharedFiles />} />
+          {userProfile && (
+            <Route
+              path="/dashboard/folder/:folderId"
+              element={<FolderComponent />}
+            />
+          )}
         </Routes>
       </BrowserRouter>
     </div>

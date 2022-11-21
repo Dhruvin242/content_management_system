@@ -11,13 +11,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../redux/Slice/userSlice";
 import DisplayAlert from "../components/alert";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { Fragment } from "react";
-import { useEffect } from "react";
 
 function Copyright(props) {
   return (
@@ -47,18 +45,9 @@ export const ResetPassword = () => {
   } = useForm();
 
   const { error } = useSelector((state) => ({ ...state.user }));
-  const { message } = useSelector((state) => ({ ...state.user.user }));
-  const { navigateURL } = useSelector((state) => ({ ...state.user.user }));
-  const user = useSelector((state) => ({ ...state.user }));
+  const { message } = useSelector((state) => ({ ...state.user }));
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setTimeout(() => {
-      navigate(navigateURL);
-    }, 1200);
-  }, [navigateURL]);
 
   const handleSubmitForm = (data) => {
     dispatch(forgotPassword({ data }));

@@ -75,6 +75,10 @@ const DashboardComponent = () => {
   const dispatch = useDispatch();
 
   const [hideOTP, sethideOTP] = React.useState(false);
+
+  const { error } = useSelector((state) => ({ ...state.user }));
+  const { message } = useSelector((state) => ({ ...state.user }));
+
   React.useEffect(() => {
     if (user) {
       const token = user.token;
@@ -83,9 +87,6 @@ const DashboardComponent = () => {
       dispatch(badgeCount(token));
     }
   }, []);
-
-  const { error } = useSelector((state) => ({ ...state.user }));
-  const { message } = useSelector((state) => ({ ...state.user.user }));
 
   const { shareCount } = useSelector(
     (state) => ({
@@ -225,7 +226,9 @@ const DashboardComponent = () => {
         ></DisplayAlert>
       )}
       {hideOTP && <HideOTP sethideOTP={sethideOTP} />}
-      {notificationOpen && <NotificationSharedFiles setNotificationOpen={setNotificationOpen}/>}
+      {notificationOpen && (
+        <NotificationSharedFiles setNotificationOpen={setNotificationOpen} />
+      )}
       <AppBar position="static">
         <Toolbar>
           <Typography

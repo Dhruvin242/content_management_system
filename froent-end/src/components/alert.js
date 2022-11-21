@@ -11,9 +11,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const DisplayAlert = (props) => {
-  const { error, errorFile, message } = useSelector(
+  const { error, errorFile, message, messageUser } = useSelector(
     (state) => ({
       error: state.user.error,
+      messageUser: state.user.message,
       errorFile: state.fileFolders.error,
       message: state.fileFolders.message,
     }),
@@ -32,7 +33,7 @@ const DisplayAlert = (props) => {
   };
 
   setTimeout(() => {
-    if (error !== "") dispatch(emptyError());
+    if (error !== "" || messageUser !== "") dispatch(emptyError());
     if (errorFile !== "" || message !== "") dispatch(emptyMessages());
   }, 1000);
 

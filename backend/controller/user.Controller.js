@@ -158,14 +158,14 @@ exports.forgotPassword = async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   const resetURL = `http://localhost:3000/reset-password/change-password/${resetToken}`;
-  const navigateURL = `/reset-password/change-password/${resetToken}`;
+  // const navigateURL = `/reset-password/change-password/${resetToken}`;
 
   const message = `Forgot your password ? Go to this URL ${resetURL}.\n If you did't forgot your password, please ignore this email!`;
   mailer(req.body.email, message);
 
   res.status(200).json({
     message: "Token Sent to your email",
-    navigateURL,
+    // navigateURL,
   });
 };
 
@@ -236,7 +236,6 @@ exports.hideCode = async (req, res, next) => {
             { isDeleted: false },
           ],
         });
-        console.log(folders, files);
         return res.status(200).json({
           message: "Passcode Success",
           folders,
@@ -246,13 +245,23 @@ exports.hideCode = async (req, res, next) => {
         const folders = await Folder.find({
           $and: [
             { userId: req.user.id },
-            { isDeleted: false },
             { isHide: false },
+            { isDeleted: false },
           ],
         });
-        return res
-          .status(200)
-          .json({ data: folders, error: "Wrong Passcode." });
+
+        const files = await File.find({
+          $and: [
+            { userId: req.user.id },
+            { isHide: false },
+            { isDeleted: false },
+          ],
+        });
+        return res.status(200).json({
+          error: "Wrong Passcode",
+          folders,
+          files,
+        });
       }
     }
   } catch (error) {

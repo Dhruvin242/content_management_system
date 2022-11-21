@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import * as api from "../api";
 
 export const login = createAsyncThunk(
@@ -68,6 +69,7 @@ export const resetChangePassword = createAsyncThunk(
 const initialState = {
   user: null,
   error: "",
+  message: "",
   loading: false,
 };
 
@@ -77,6 +79,7 @@ const userSlice = createSlice({
   reducers: {
     emptyError: (state, action) => {
       state.error = "";
+      state.message = "";
     },
   },
   extraReducers: {
@@ -87,10 +90,11 @@ const userSlice = createSlice({
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
       state.user = action.payload;
+      state.message = action.payload.message;
     },
     [login.rejected]: (state, action) => {
       state.loading = false;
-      state.error = 'Login Failed';
+      state.error = "Login Failed";
     },
     [registerUser.pending]: (state, action) => {
       state.loading = true;
@@ -132,6 +136,7 @@ const userSlice = createSlice({
     },
     [resetChangePassword.fulfilled]: (state, action) => {
       state.loading = false;
+      state.message = action.payload.message;
       state.user = action.payload;
     },
     [resetChangePassword.rejected]: (state, action) => {

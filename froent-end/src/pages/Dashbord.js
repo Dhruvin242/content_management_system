@@ -32,11 +32,11 @@ export default function PrimarySearchAppBar() {
         justify="center"
         // style={{ minHeight: "100vh" }}
       >
-        {/* {userFolder?.length === 0 && userFiles?.length === 0 && (
+        {userFolder?.length === 0 && userFiles?.length === 0 && (
           <Grid container direction="column" alignItems="center">
             <Typography>No data</Typography>
           </Grid>
-        )} */}
+        )}
 
         {isLoading ? (
           <SkeletonCompenent card={9} />

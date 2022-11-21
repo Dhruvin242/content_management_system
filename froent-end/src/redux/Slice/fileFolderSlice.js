@@ -225,8 +225,7 @@ const fileFolderSlice = createSlice({
     });
     builder.addCase(hideFolder.fulfilled, (state, action) => {
       state.isLoading = false;
-      console.log(action);
-      state.userFolder = action.payload.data;
+      state.userFolder = action.payload.folders;
       state.userFiles = action.payload.files;
       state.message = action.payload.message;
       state.error = action.payload.error;
@@ -291,7 +290,6 @@ const fileFolderSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(searchDocument.fulfilled, (state, action) => {
-      console.log(action);
       state.isLoading = false;
       state.userFolder = action.payload.folders;
       state.userFiles = action.payload.files;

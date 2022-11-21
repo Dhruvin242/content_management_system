@@ -10,8 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import DisplayAlert from "../components/alert";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { GoogleLogin } from "react-google-login";
@@ -20,6 +19,7 @@ import { gapi } from "gapi-script";
 import { useEffect } from "react";
 import { googleSignIn, login } from "../redux/Slice/userSlice";
 import LinearProgress from "@mui/material/LinearProgress";
+import DisplayAlert from "../components/alert";
 
 function Copyright(props) {
   return (
@@ -49,17 +49,23 @@ export const SignIn = () => {
     formState: { errors },
   } = useForm();
 
-  const { error } = useSelector((state) => ({ ...state.user }));
-  const { message } = useSelector((state) => ({ ...state.user.user }));
+  const { userState, message, error } = useSelector(
+    (state) => (
+      { userState: state.user }
+      // { message: state.user.message },
+      // { error: state.user.error }
+    ),
+    shallowEqual
+  );
   const user = localStorage.getItem("profile");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmitForm = (data) => {
-    setLoading(true);
-    setTimeout(() => {
-      dispatch(login({ data, navigate }));
-    }, 2000);
+    if (userState.loading) {
+      setLoading(true);
+    }
+    dispatch(login({ data, navigate }));
   };
 
   const googleSuccess = (resp) => {
@@ -90,22 +96,24 @@ export const SignIn = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {error && (
+      {console.log(userState)}
+      {userState.error && (
         <DisplayAlert
           title="error"
-          message={error}
+          message={userState.error}
           vertical="top"
           horizontal="right"
         ></DisplayAlert>
       )}
-      {message && (
+      {userState.message && (
         <DisplayAlert
           title="success"
-          message={message}
+          message={userState.message}
           vertical="top"
           horizontal="right"
         ></DisplayAlert>
       )}
+      
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
