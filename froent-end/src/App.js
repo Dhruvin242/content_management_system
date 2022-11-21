@@ -7,6 +7,7 @@ import { ResetPassword } from "./pages/forgot-password";
 import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
 import FolderComponent from "./components/FolderComponent";
+import Example from "./components/fileEdit";
 
 const App = () => {
   const userProfile = localStorage.getItem("profile");
@@ -29,6 +30,7 @@ const App = () => {
               element={<FolderComponent />}
             />
           )}
+          <Route path="/temp" element={<Example />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -92,7 +92,7 @@ const shareFiles = createSlice({
     });
     builder.addCase(shareFile.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.message = "Share File Successfully";
+      console.log(action)
       state.userFiles = action.payload.data;
       state.shareCount = action.payload.shareCount;
     });

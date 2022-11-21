@@ -78,6 +78,9 @@ const DashboardComponent = () => {
 
   const { error } = useSelector((state) => ({ ...state.user }));
   const { message } = useSelector((state) => ({ ...state.user }));
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [notificationOpen, setNotificationOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (user) {
@@ -86,7 +89,7 @@ const DashboardComponent = () => {
       dispatch(getFiles(token));
       dispatch(badgeCount(token));
     }
-  }, []);
+  }, [notificationOpen]);
 
   const { shareCount } = useSelector(
     (state) => ({
@@ -94,10 +97,6 @@ const DashboardComponent = () => {
     }),
     shallowEqual
   );
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [notificationOpen, setNotificationOpen] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);

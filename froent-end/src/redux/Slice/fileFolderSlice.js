@@ -266,8 +266,8 @@ const fileFolderSlice = createSlice({
     });
     builder.addCase(getFiles.fulfilled, (state, action) => {
       state.isLoading = false;
-      const newdata = action.payload.data.files;
-      state.userFiles = newdata;
+      // console.log(action);
+      state.userFiles = action.payload.data.files;
     });
     builder.addCase(getFiles.rejected, (state, action) => {
       state.isLoading = false;

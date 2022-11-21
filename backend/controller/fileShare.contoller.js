@@ -64,10 +64,12 @@ exports.fileStatus = async (req, res, next) => {
       receivedUserEmail: req.user.email,
       name: shareFileName,
       fileStatus: "NotFixed",
+      visible: true,
     });
 
     if (fileResponse === "Denine") {
       requestShareFile.fileStatus = "Denine";
+      requestShareFile.visible = false;
       requestShareFile.save();
       return res.status(200).json({
         message: "Shared Request File Denine",
@@ -85,6 +87,7 @@ exports.fileStatus = async (req, res, next) => {
         });
 
         requestShareFile.fileStatus = "Approve";
+        requestShareFile.visible = false;
         requestShareFile.save();
 
         return res.status(200).json({

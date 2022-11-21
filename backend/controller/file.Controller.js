@@ -13,7 +13,7 @@ exports.fileUpload = async (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ message: "File required" });
 
-    const checkfile = await Folder.findOne({
+    const checkfile = await File.findOne({
       $and: [
         { name: req.file.originalname },
         { createdBy: req.user.name },

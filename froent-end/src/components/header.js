@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,7 +16,7 @@ function ResponsiveAppBar() {
   const userState = localStorage.getItem("profile");
   const navigate = useNavigate();
   const pages = ["Register", "Login"];
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
 
 
   const handleOpenNavMenu = (event) => {

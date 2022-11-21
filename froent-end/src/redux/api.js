@@ -1,10 +1,14 @@
 import axios from "axios";
+const localhost = "http://localhost:5000";
+const deploy = "https://content-management-system16.herokuapp.com";
 
-const API = axios.create({ baseURL: "https://content-management-system16.herokuapp.com/" });
+const API = axios.create({
+  baseURL: localhost,
+});
 
 const authAxios = (token) =>
   axios.create({
-    baseURL: "https://content-management-system16.herokuapp.com/",
+    baseURL: localhost,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -12,7 +16,7 @@ const authAxios = (token) =>
 
 const authHeader = (config) =>
   axios.create({
-    baseURL: "https://content-management-system16.herokuapp.com/",
+    baseURL: localhost,
     headers: config.headers,
   });
 
