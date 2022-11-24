@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 import BasicCard from "../components/folderCard";
 import FileCard from "./fileCard";
 
-
 const FolderComponent = () => {
   const { folderId } = useParams();
   const { childFolders, childFiles } = useSelector(
@@ -24,6 +23,7 @@ const FolderComponent = () => {
 
   return (
     <Fragment>
+
       <DashboardComponent />
       {childFolders.length > 0 ? (
         childFolders.map((folder) => (
@@ -59,7 +59,7 @@ const FolderComponent = () => {
           </Grid>
         ))
       ) : (
-        <p className="text-center my-5">  </p>
+        <p className="text-center my-5"> </p>
       )}
       <FormDialog />
     </Fragment>

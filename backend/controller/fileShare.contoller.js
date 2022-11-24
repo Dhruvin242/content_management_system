@@ -3,6 +3,7 @@ const File = require("../model/File.model");
 
 exports.fileShared = async (req, res, next) => {
   try {
+    console.log("shared file ...........")
     const checkfile = await FileShare.findOne({
       $and: [
         { name: req.body.name },
@@ -64,12 +65,10 @@ exports.fileStatus = async (req, res, next) => {
       receivedUserEmail: req.user.email,
       name: shareFileName,
       fileStatus: "NotFixed",
-      visible: true,
     });
 
     if (fileResponse === "Denine") {
       requestShareFile.fileStatus = "Denine";
-      requestShareFile.visible = false;
       requestShareFile.save();
       return res.status(200).json({
         message: "Shared Request File Denine",
@@ -87,7 +86,6 @@ exports.fileStatus = async (req, res, next) => {
         });
 
         requestShareFile.fileStatus = "Approve";
-        requestShareFile.visible = false;
         requestShareFile.save();
 
         return res.status(200).json({
@@ -106,3 +104,4 @@ exports.fileStatus = async (req, res, next) => {
       .json({ error: "Something went wrong please again later" });
   }
 };
+

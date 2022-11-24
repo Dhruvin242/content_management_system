@@ -65,9 +65,8 @@ export default function FileCard(props) {
     setExpanded(!expanded);
   };
 
-  const handleFileOpen = (file) => {
-    dispatch(setCurrentFolder(file));
-    navigate(`/dashboard/folder/${file}`);
+  const handleFileEdit = async (e) => {
+    navigate(`/file/${e}`);
   };
 
   const handlePdfPreview = () => {
@@ -93,11 +92,9 @@ export default function FileCard(props) {
     dispatch(hideDocument({ body, token }));
   };
 
-  const downloadURL = `https://res.cloudinary.com/dh2o42cij/${
-    props.imageURL.split("/")[4]
-  }/upload/fl_attachment:${props.title.split(".")[0]}/Files/${
-    props.imageURL.split("/")[8]
-  }`;
+  const downloadURL = `https://res.cloudinary.com/dh2o42cij/raw/upload/fl_attachment:${
+    props.title.split(".")[0]
+  }/Files/${props.title.split(".")[0]}`;
 
   return (
     <React.Fragment>
@@ -112,17 +109,66 @@ export default function FileCard(props) {
         <ShareDialog setShareRes={setShareRes} fileName={props.title} />
       )}
       <Card sx={props.sx}>
-        <CardHeader
-          title={props.title}
-          subheader={props.filecreatedAt.substr(
-            0,
-            props.filecreatedAt.search("T")
-          )}
-        />
+        <div className="cardWrapper">
+          <CardHeader
+            title={
+              <Typography variant="h6" gutterBottom>
+                {props.title}
+              </Typography>
+            }
+            subheader={props.filecreatedAt.substr(
+              0,
+              props.filecreatedAt.search("T")
+            )}
+          />
 
+          <CardActions disableSpacing>
+            <IconButton href={downloadURL}>
+              <DownloadIcon />
+            </IconButton>
+            <ExpandMore
+              expand={expanded}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <MenuList>
+                <MenuItem onClick={handleshare}>
+                  <ListItemIcon>
+                    <ShareIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography variant="body2" color="text.secondary">
+                    Share
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handledelete}>
+                  <ListItemIcon>
+                    <DeleteIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography variant="body2" color="text.secondary">
+                    Delete
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handlehide}>
+                  <ListItemIcon>
+                    <VisibilityOffIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography variant="body2" color="text.secondary">
+                    Hide
+                  </Typography>
+                </MenuItem>
+              </MenuList>
+            </CardContent>
+          </Collapse>
+        </div>
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            {props.type === "image/jpeg" && (
+            {props.type.startsWith("image") && (
               <IconButton
                 aria-label="share"
                 size="small"
@@ -158,7 +204,7 @@ export default function FileCard(props) {
               <IconButton
                 aria-label="share"
                 size="small"
-                onClick={() => handleFileOpen(props.fileID)}
+                onClick={() => handleFileEdit(props.fileID)}
               >
                 <EditIcon sx={{ fontSize: 45 }} />
               </IconButton>
@@ -170,49 +216,6 @@ export default function FileCard(props) {
             )}
           </Typography>
         </CardContent>
-        <CardActions disableSpacing>
-          <IconButton href={downloadURL}>
-            <DownloadIcon />
-          </IconButton>
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <MenuList>
-              <MenuItem onClick={handleshare}>
-                <ListItemIcon>
-                  <ShareIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="body2" color="text.secondary">
-                  Share
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handledelete}>
-                <ListItemIcon>
-                  <DeleteIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="body2" color="text.secondary">
-                  Delete
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handlehide}>
-                <ListItemIcon>
-                  <VisibilityOffIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="body2" color="text.secondary">
-                  Hide
-                </Typography>
-              </MenuItem>
-            </MenuList>
-          </CardContent>
-        </Collapse>
       </Card>
     </React.Fragment>
   );

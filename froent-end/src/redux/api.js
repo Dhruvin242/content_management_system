@@ -79,3 +79,10 @@ export const badgeContentAPI = (token) => {
 export const fileStatus = (body, token) => {
   return authAxios(token).post(`/api/v1/file/resReqFile`, body);
 };
+
+export const FileEditAPI = (body, token, fileId) => {
+  return authAxios(token).post(
+    `/api/v1/file/changefileContent/${fileId}`,
+    body
+  );
+};

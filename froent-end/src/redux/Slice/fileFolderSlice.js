@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../api";
-import { resFileStatus } from "./shareSlice";
+import { resFileStatus, shareFileEdit } from "./shareSlice";
 
 const initialState = {
   isLoading: true,
@@ -303,6 +303,12 @@ const fileFolderSlice = createSlice({
       state.isLoading = false;
       const newdata = action.payload[0].data.files;
       state.userFiles = newdata;
+    });
+    builder.addCase(shareFileEdit.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const newdata = action.payload[0].data.files;
+      state.userFiles = newdata;
+      state.message = action.payload[1];
     });
   },
 });

@@ -26,7 +26,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { TextField } from "@mui/material";
 import ShareDialog from "./shareDialog";
-
+import "./style.css";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -77,7 +77,6 @@ export default function BasicCard(props) {
     setEditable(true);
   };
 
-  const handleshare = () => {};
   const handlehide = () => {
     const body = {
       folder: props.folderID,
@@ -100,7 +99,7 @@ export default function BasicCard(props) {
   };
 
   return (
-    <Card sx={props.sx}>
+    <Card className="main-wrapper" sx={props.sx}>
       {Respose && (
         <ResponsiveDialog
           setResponse={setResponse}
@@ -108,27 +107,69 @@ export default function BasicCard(props) {
           folderId={props.folderID}
         />
       )}
-
-      <CardHeader
-        title={
-          Editable ? (
-            <TextField
-              onKeyPress={RenameHandle}
-              required
-              id="outlined-required"
-              label="Required"
-              defaultValue={props.title}
-            />
-          ) : (
-            props.title
-          )
-        }
-        subheader={props.foldercreatedAt.substr(
-          0,
-          props.foldercreatedAt.search("T")
-        )}
-      />
-
+      <div className="cardWrapper">
+        <CardHeader
+          title={
+            Editable ? (
+              <TextField
+                onKeyPress={RenameHandle}
+                required
+                id="outlined-required"
+                label="Required"
+                defaultValue={props.title}
+              />
+            ) : (
+              <Typography variant="h6" gutterBottom>
+                {props.title}
+              </Typography>
+            )
+          }
+          subheader={props.foldercreatedAt.substr(
+            0,
+            props.foldercreatedAt.search("T")
+          )}
+        />
+        <CardActions disableSpacing>
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <MenuList>
+              <MenuItem onClick={handlerename}>
+                <ListItemIcon>
+                  <DriveFileRenameOutlineIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2" color="text.secondary">
+                  Rename
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handledelete}>
+                <ListItemIcon>
+                  <DeleteIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2" color="text.secondary">
+                  Delete
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handlehide}>
+                <ListItemIcon>
+                  <VisibilityOffIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2" color="text.secondary">
+                  Hide
+                </Typography>
+              </MenuItem>
+            </MenuList>
+          </CardContent>
+        </Collapse>
+      </div>
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           {props.type === "folder" && (
@@ -142,54 +183,6 @@ export default function BasicCard(props) {
           )}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <MenuList>
-            <MenuItem onClick={handleshare}>
-              <ListItemIcon>
-                <ShareIcon fontSize="small" />
-              </ListItemIcon>
-              <Typography variant="body2" color="text.secondary">
-                Share
-              </Typography>
-            </MenuItem>
-            <MenuItem onClick={handlerename}>
-              <ListItemIcon>
-                <DriveFileRenameOutlineIcon fontSize="small" />
-              </ListItemIcon>
-              <Typography variant="body2" color="text.secondary">
-                Rename
-              </Typography>
-            </MenuItem>
-            <MenuItem onClick={handledelete}>
-              <ListItemIcon>
-                <DeleteIcon fontSize="small" />
-              </ListItemIcon>
-              <Typography variant="body2" color="text.secondary">
-                Delete
-              </Typography>
-            </MenuItem>
-            <MenuItem onClick={handlehide}>
-              <ListItemIcon>
-                <VisibilityOffIcon fontSize="small" />
-              </ListItemIcon>
-              <Typography variant="body2" color="text.secondary">
-                Hide
-              </Typography>
-            </MenuItem>
-          </MenuList>
-        </CardContent>
-      </Collapse>
     </Card>
   );
 }

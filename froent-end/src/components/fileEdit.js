@@ -1,45 +1,102 @@
-import React, { useState, useRef, Fragment } from "react";
-import JoditEditor from "jodit-react";
-import { Button } from "@mui/material";
-import BackupIcon from "@mui/icons-material/Backup";
+import { Fragment, useEffect, useState } from "react";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+import { Button, Grid } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { useParams } from "react-router-dom";
+import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { shareFileEdit } from "../redux/Slice/shareSlice";
+import DisplayAlert from "./alert";
+const FileEdit = () => {
+  const { fileId } = useParams();
 
+  const { file, user, error, message } = useSelector(
+    (state) => ({
+      file: state.fileFolders.userFiles,
+      user: state.user.user,
+      error: state.fileFolders.error,
+      message: state.fileFolders.message,
+    }),
+    shallowEqual
+  );
 
-const Example = ({ placeholder }) => {
-  const editor = useRef(null);
+  const dispatch = useDispatch();
+
   const [content, setContent] = useState("");
-  const [fileContent, setfileContent] = useState("");
+  const [pre, setPre] = useState("");
 
-  const handlefilechange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsText(file);
-    reader.onload = () => {
-      setfileContent(reader.result);
-    };
-    reader.onerror = () => {
-      console.log("File error", reader.error);
-    };
+  const getFile = () => {
+    const editFile = file.filter((e) => e._id === fileId);
+    return editFile;
   };
+
+  const FetchText = async () => {
+    const editFile = getFile();
+    const res = await axios.get(`${editFile[0].url}`);
+    setPre(res.data);
+    setContent(res.data);
+  };
+
+  useEffect(() => {
+    FetchText();
+  }, [dispatch]);
+
+  const handleSave = () => {
+    const body = {
+      newdata: content,
+    };
+    const token = user.token;
+    dispatch(shareFileEdit({ body, token, fileId }));
+  };
+
   return (
     <Fragment>
-      <Button
-        sx={{ m: 5 }}
-        variant="contained"
-        component="label"
-        startIcon={<BackupIcon />}
-      >
-        Read File
-        <input hidden multiple type="file" onChange={handlefilechange} />
-      </Button>
-      <JoditEditor
-        ref={editor}
-        value={fileContent}
-        tabIndex={1} // tabIndex of textarea
-        // onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-        // onChange={(newContent) => {}}
+      {error && (
+        <DisplayAlert
+          title="error"
+          message={error}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
+      {message && (
+        <DisplayAlert
+          title="success"
+          message={message}
+          vertical="top"
+          horizontal="right"
+        ></DisplayAlert>
+      )}
+      <h1>File Edit here</h1>
+
+      <TextareaAutosize
+        id="updatedContent"
+        aria-label="minimum height"
+        minRows={10}
+        style={{
+          width: 800,
+          textAlign: "left",
+        }}
+        value={content}
+        onChange={(e) => {
+          setContent(e.target.value);
+        }}
       />
+
+      <Grid alignItems="center">
+        <Button
+          sx={{ m: 3, px: 10 }}
+          variant="contained"
+          component="label"
+          startIcon={<CloudUploadIcon />}
+          disabled={pre === content}
+          onClick={handleSave}
+        >
+          Save
+        </Button>
+      </Grid>
     </Fragment>
   );
 };
 
-export default Example;
+export default FileEdit;
