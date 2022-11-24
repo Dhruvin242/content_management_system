@@ -15,6 +15,34 @@
 .cardWrapper .MuiCardHeader-root {
 text-align: left;
 }
- .MuiCardContent-root  {
-    min-height: 60px;
+ 
+
+.card-main-wrapper{
+    padding: 30px 35px 10px 35px;
+    display: flex;
+    column-gap: 20px;
+   
 }
+
+
+.css-1807xm1-MuiPaper-root-MuiCard-root{
+border-radius: 12px !;
+}
+.card-box {
+    border-top: 6px solid #ff8100;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    width: 220px;
+}
+
+
+.card-footer{
+    background: #b3b3b336;
+    padding: 10px 20px;
+}
+
+
+.css-8xu60g-MuiGrid-root{
+    width: unset;
+}
+

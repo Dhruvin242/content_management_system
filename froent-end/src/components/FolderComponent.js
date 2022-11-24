@@ -23,44 +23,55 @@ const FolderComponent = () => {
 
   return (
     <Fragment>
-
       <DashboardComponent />
-      {childFolders.length > 0 ? (
-        childFolders.map((folder) => (
-          <Grid item key={folder?._id}>
-            <BasicCard
-              type="folder"
-              foldercreatedAt={folder?.createdAt}
-              folderID={folder?._id}
-              title={folder?.name}
-              isHide={folder?.isHide}
-              sx={{ width: 220, ml: 3, mt: 3 }}
-            />
-          </Grid>
-        ))
-      ) : (
-        <p className="text-center my-5"> Empty Folder</p>
-      )}
+      <div className="card-main-wrapper">
+        {childFolders.length > 0 ? (
+          childFolders.map((folder) => (
+            <div className="card-box" key={folder?._id}>
+              <Grid
+                sx={{ width: "220px" }}
+                container
+                display="flex"
+                columnGap="20px"
+                item
+                key={folder?._id}
+              >
+                <BasicCard
+                  type="folder"
+                  foldercreatedAt={folder?.createdAt}
+                  folderID={folder?._id}
+                  title={folder?.name}
+                  isHide={folder?.isHide}
+                />
+              </Grid>
+            </div>
+          ))
+        ) : (
+          <p className="text-center my-5"> Empty Folder</p>
+        )}
+      </div>
 
       {/* Checking for files */}
-
-      {childFiles.length > 0 ? (
-        childFiles.map((files) => (
-          <Grid item key={files?._id}>
-            <FileCard
-              type={files?.type}
-              imageURL={files?.url}
-              filecreatedAt={files?.createdAt}
-              fileID={files?._id}
-              title={files?.name}
-              isHide={files?.isHide}
-              sx={{ width: 220, ml: 3, mt: 3 }}
-            />
-          </Grid>
-        ))
-      ) : (
-        <p className="text-center my-5"> </p>
-      )}
+      <div className="card-main-wrapper">
+        {childFiles.length > 0 ? (
+          childFiles.map((files) => (
+            <div className="card-box" key={files?._id}>
+              <Grid item key={files?._id}>
+                <FileCard
+                  type={files?.type}
+                  imageURL={files?.url}
+                  filecreatedAt={files?.createdAt}
+                  fileID={files?._id}
+                  title={files?.name}
+                  isHide={files?.isHide}
+                />
+              </Grid>
+            </div>
+          ))
+        ) : (
+          <p className="text-center my-5"> </p>
+        )}
+      </div>
       <FormDialog />
     </Fragment>
   );

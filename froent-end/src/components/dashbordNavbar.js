@@ -228,61 +228,65 @@ const DashboardComponent = () => {
       {notificationOpen && (
         <NotificationSharedFiles setNotificationOpen={setNotificationOpen} />
       )}
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component={Button}
-            onDoubleClick={handleDoubleClick}
-            noWrap
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            CMS
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-              onChange={handleSearch}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <IconButton onClick={handleCard}>
-            <Badge color="secondary" badgeContent={shareCount}>
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <AccountMenu />
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
+      <div className="header-wrapper">
+        <AppBar position="static">
+          <Toolbar>
+            <Typography
+              variant="h5"
+              component={Button}
+              onDoubleClick={handleDoubleClick}
+              noWrap
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
             >
-              <MoreIcon />
+              CMS
+            </Typography>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                onChange={handleSearch}
+              />
+            </Search>
+            <Box sx={{ flexGrow: 1 }} />
+            <IconButton onClick={handleCard}>
+              <Badge color="secondary" badgeContent={shareCount}>
+                <NotificationsIcon />
+              </Badge>
             </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <AccountMenu />
+            </Box>
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </div>
       {renderMobileMenu}
       {renderMenu}
-      <Breadcrumbs />
+      <div className="navbar-wrapper">
+        <Breadcrumbs />
+      </div>
     </Box>
   );
 };

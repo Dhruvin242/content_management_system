@@ -11,6 +11,7 @@ import FileEdit from "./components/fileEdit";
 
 const App = () => {
   const userProfile = localStorage.getItem("profile");
+
   return (
     <div className="App">
       <BrowserRouter>
