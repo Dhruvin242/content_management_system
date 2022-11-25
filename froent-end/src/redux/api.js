@@ -1,10 +1,14 @@
 import axios from "axios";
+const localhost = "http://localhost:5000";
+const deploy = "https://content-management-system16.herokuapp.com";
 
-const API = axios.create({ baseURL: "http://localhost:5000" });
+const API = axios.create({
+  baseURL: localhost,
+});
 
 const authAxios = (token) =>
   axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: localhost,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -12,7 +16,7 @@ const authAxios = (token) =>
 
 const authHeader = (config) =>
   axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: localhost,
     headers: config.headers,
   });
 
@@ -74,4 +78,11 @@ export const badgeContentAPI = (token) => {
 
 export const fileStatus = (body, token) => {
   return authAxios(token).post(`/api/v1/file/resReqFile`, body);
+};
+
+export const FileEditAPI = (body, token, fileId) => {
+  return authAxios(token).post(
+    `/api/v1/file/changefileContent/${fileId}`,
+    body
+  );
 };

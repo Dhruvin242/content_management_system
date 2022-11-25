@@ -45,7 +45,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            {username && <Avatar sx={{ width: 32, height: 32 }}>{username[0]}</Avatar>}
+            {username && <Avatar sx={{ width: 32, height: 32 ,backgroundColor :"#fff", fontWeight:"600", color:"#ff8100"}}>{username[0]}</Avatar>}
           </IconButton>
         </Tooltip>
       </Box>
@@ -58,6 +58,7 @@ export default function AccountMenu() {
         PaperProps={{
           elevation: 0,
           sx: {
+           
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,

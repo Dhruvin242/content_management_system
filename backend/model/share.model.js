@@ -55,6 +55,10 @@ const fileShareSchema = new mongoose.Schema({
     enum: ["Approve", "Denine", "NotFixed"],
     default: "NotFixed",
   },
+  visible: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const FileShare = mongoose.model("FileShare", fileShareSchema);

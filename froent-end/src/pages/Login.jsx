@@ -96,7 +96,6 @@ export const SignIn = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {console.log(userState)}
       {userState.error && (
         <DisplayAlert
           title="error"
@@ -153,7 +152,7 @@ export const SignIn = () => {
                 required: "Required Field",
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalied Email Address",
+                  message: "Invalid Email Address",
                 },
               })}
               error={!!errors?.email}

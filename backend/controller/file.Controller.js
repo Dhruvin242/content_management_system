@@ -1,7 +1,9 @@
 const Folder = require("../model/Folder.model");
 const File = require("../model/File.model");
+const FileShare = require("../model/share.model");
 const multer = require("multer");
 const { cloudinary } = require("../utils/cloudinary");
+const axios = require("axios");
 
 const storage = multer.diskStorage({});
 
@@ -13,7 +15,7 @@ exports.fileUpload = async (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ message: "File required" });
 
-    const checkfile = await Folder.findOne({
+    const checkfile = await File.findOne({
       $and: [
         { name: req.file.originalname },
         { createdBy: req.user.name },
@@ -27,12 +29,13 @@ exports.fileUpload = async (req, res, next) => {
     }
 
     const uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+      public_id: req.file.originalname.split(".")[0],
       folder: "Files",
       resource_type: "auto",
     });
 
     const { originalname, mimetype } = req.file;
-    const { secure_url } = uploadedFile;
+    const { secure_url, version } = uploadedFile;
 
     const newFile = await File.create({
       name: originalname,
@@ -43,7 +46,6 @@ exports.fileUpload = async (req, res, next) => {
       path: req.body.path,
       tags: req.body.tags,
     });
-
     return res.status(200).json({
       newFile,
       message: "File uploaded successfully",
@@ -101,7 +103,7 @@ exports.HideFileFolder = async (req, res, next) => {
     return res.status(500).json({ message: "Can not hide Folder or File" });
   }
 };
-//RegExp(req.query[el])
+
 exports.search = async (req, res, next) => {
   try {
     const { searchWord } = req.params;
@@ -143,5 +145,49 @@ exports.search = async (req, res, next) => {
     });
   } catch (error) {
     return res.status(500).json({ message: "No Data Found.." });
+  }
+};
+
+exports.changeFileConent = async (req, res, next) => {
+  try {
+    const file = await File.findById(req.params.fileId);
+    const { newdata } = req.body;
+    let buff = new Buffer.from(newdata);
+    let base64data = buff.toString("base64");
+    const finalData = `data:text/plain;base64,${base64data}`;
+
+    let type = file.type;
+    type.startsWith("text")
+      ? (type = "raw")
+      : type.startsWith("video")
+      ? (type = "video")
+      : (type = "image");
+
+    const public_ID = `Files/${file.name.split(".")[0]}`;
+    const destroyFile = await cloudinary.uploader.destroy(public_ID, {
+      type: "upload",
+      resource_type: type,
+    });
+
+    const newContentFile = await cloudinary.uploader.upload(finalData, {
+      public_id: file.name.split(".")[0],
+      resource_type: "raw",
+    });
+
+    const updateShareUser = await File.updateMany(
+      { name: file.name },
+      { $set: { url: newContentFile.url } }
+    );
+    file.url = newContentFile.url;
+    file.save();
+
+    return res.status(200).json({
+      message: "File Updated Successfully",
+    });
+  } catch (error) {
+    console.log({ error });
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
   }
 };

@@ -77,6 +77,7 @@ exports.deleteFolder = async (req, res, next) => {
     if (fileCheck) {
       fileCheck.isDeleted = true;
       fileCheck.save();
+      
 
       return res.status(200).json({
         message: "Folder Deleted Successfully.!",

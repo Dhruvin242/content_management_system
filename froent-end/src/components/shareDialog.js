@@ -14,10 +14,11 @@ import DisplayAlert from "../components/alert";
 
 export default function ShareDialog(props) {
   const dispatch = useDispatch();
-  const { data, user } = useSelector(
+  const { data, user,message } = useSelector(
     (state) => ({
       data: state.fileFolders.userFiles,
       user: state.user.user,
+      message : state.shareFiles
     }),
     shallowEqual
   );
@@ -48,12 +49,7 @@ export default function ShareDialog(props) {
       tags: newFile[0].tags,
     };
     dispatch(shareFile({ body, token }));
-    <DisplayAlert
-      title="success"
-      message="File Share Successfully"
-      vertical="top"
-      horizontal="right"
-    ></DisplayAlert>;
+
     setOpen(false);
     props.setShareRes(false);
   };
