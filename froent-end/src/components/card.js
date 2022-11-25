@@ -128,27 +128,28 @@ export default function FormDialog() {
           horizontal="right"
         ></DisplayAlert>
       )}
-
+ 
+ <div className="button-circle-wrap">
       <SpeedDial
         ariaLabel="SpeedDial basic example"
-        sx={{ position: "absolute", bottom: 50, right: 20 }}
+        sx={{ position: "absolute", bottom: 50, right: 20}}
         icon={<SpeedDialIcon />}
       >
         <SpeedDialAction
           key="Create Folder"
-          icon={<FolderOpenIcon />}
+          icon={<FolderOpenIcon  sx={{color : "white"}}/>}
           tooltipTitle="Create Folder"
           onClick={handleClickOpen}
         />
 
         <SpeedDialAction
           key="Upload File"
-          icon={<UploadFileIcon />}
+          icon={<UploadFileIcon sx={{color : "white"}} />}
           tooltipTitle="Upload File"
           onClick={handleClickFileOpen}
         />
       </SpeedDial>
-
+      </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create Folder</DialogTitle>
         <DialogContent>

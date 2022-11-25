@@ -21,7 +21,7 @@ border-bottom-left-radius: 12px;
 border-bottom-right-radius: 12px; */
 
 .card-main-wrapper{
-    padding: 30px 35px 10px 35px;
+    padding: 9px 35px 20px 35px;
     display: flex;
     column-gap: 20px;
    
@@ -62,14 +62,105 @@ border-radius: 12px !;
 }
 
 .heading{
-    background-color: #ff8100;
-    padding: 8px;
-    margin: 10px;
+    padding: 2px 8px;
+    margin: 15px 12px;
     border-radius: 12px;
-    text-align: center;
-    border-color: white;
+    text-align: left;
+}
+
+.file-title{
+    font-size: 24px;
+    color: black;
 }
 
 .editor{
     margin: 15px;
 }
+
+.button-circle-wrap  button{
+    background-color: #ff8100;
+}
+
+.button-circle-wrap  button:hover{
+    background-color: #fff;
+    color: #ff8100;
+}
+
+.header-wrapper .MuiBadge-badge{
+    background: #ffffff;
+    color: #ff8100;
+}
+
+
+.login-page-wrapper{
+    background-color: #ffffff;
+
+}
+
+.login-page-wrapper .login-body{
+    background-color: #f3f3f3;
+    border-radius: 25px;
+    padding: 0px 20px;
+    box-shadow: 5px 5px 8px 1px #e1e1e1;
+}
+
+
+.login-body .css-18bjzlh-MuiAvatar-root{
+  width: 50px;
+  height: 50px;
+   background-color: #ff8100;
+
+}
+
+.login-body h1{
+    font-size: 23px;
+    color: #000;
+    font-weight: 600;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+  }
+
+  .login-body input{
+    width: 100%;
+    height: 20px;
+    font-size: 14px;
+    
+    border-radius: 25px;
+  }
+
+  .login-body label{
+    color: #6a6a6a;
+
+  }
+
+  .home-pages-wrapper{
+    background-image: url("https://images.pexels.com/photos/67112/pexels-photo-67112.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+   
+  }
+
+  .bg-home{
+    background-color: #0000008c;
+    width: 100%;
+    height: 100vh;
+  }
+  .bg-home h2{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .folder-heading{
+    margin-left: 4%;
+  }
