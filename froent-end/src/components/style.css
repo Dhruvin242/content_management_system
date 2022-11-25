@@ -12,10 +12,13 @@
     display: flex;
     flex-direction: column-reverse;
 }
-.cardWrapper .MuiCardHeader-root {
+ .MuiCardHeader-root {
 text-align: left;
 }
- 
+
+/* min-height: 215px;
+border-bottom-left-radius: 12px;
+border-bottom-right-radius: 12px; */
 
 .card-main-wrapper{
     padding: 30px 35px 10px 35px;
@@ -24,6 +27,11 @@ text-align: left;
    
 }
 
+.file-card-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root{
+    min-height: 220px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
 
 .css-1807xm1-MuiPaper-root-MuiCard-root{
 border-radius: 12px !;
@@ -35,10 +43,17 @@ border-radius: 12px !;
     width: 220px;
 }
 
+.card-box .css-1807xm1-MuiPaper-root-MuiCard-root{
+    min-height: 215px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
 
 .card-footer{
     background: #b3b3b336;
     padding: 10px 20px;
+    
 }
 
 
@@ -46,3 +61,15 @@ border-radius: 12px !;
     width: unset;
 }
 
+.heading{
+    background-color: #ff8100;
+    padding: 8px;
+    margin: 10px;
+    border-radius: 12px;
+    text-align: center;
+    border-color: white;
+}
+
+.editor{
+    margin: 15px;
+}

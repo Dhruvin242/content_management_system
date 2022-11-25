@@ -8,11 +8,10 @@ exports.fileShared = async (req, res, next) => {
         { name: req.body.name },
         { type: req.body.type },
         { sharedUserEmail: req.user.email },
-        { receivedUserId: req.body.receivedUserId },
+        { receivedUserEmail: req.body.receivedUserEmail },
         { fileStatus: "NotFixed" },
       ],
     });
-
     if (checkfile) {
       return res
         .status(400)
@@ -87,13 +86,14 @@ exports.fileStatus = async (req, res, next) => {
         requestShareFile.fileStatus = "Approve";
         requestShareFile.save();
 
-        const fileshareupdate = await File.findOne({
-          name: shareFileName,
-          createdBy: requestShareFile.sharedUserName,
-        });
+        const fileshareupdate = await File.updateOne(
+          { name: shareFileName, createdBy: requestShareFile.sharedUserName },
+          { $push: { "SharedWith": req.user.name } }
+        );
 
-        fileshareupdate.SharedWith = req.user.name;
-        fileshareupdate.save();
+        // fileshareupdate.SharedWith = req.user.name;
+        // fileshareupdate.save();
+        console.log('lets see output',fileshareupdate)  
         console.log("=====================================update");
 
         return res.status(200).json({

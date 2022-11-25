@@ -16,11 +16,24 @@ export default function FilePreview(props) {
 
   return (
     <Dialog
+      fullScreen
+      fullWidth
       open={open}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
+      <Button
+        sx={{
+          backgroundColor: "#ff8100",
+          fontWeight: 900,
+          color: "white",
+          padding: "10px",
+        }}
+        onClick={handleClose}
+      >
+        Close
+      </Button>
       <DialogTitle>{props.documentName}</DialogTitle>
       <DialogContent>
         <img
@@ -33,9 +46,6 @@ export default function FilePreview(props) {
           src={props.imageURL}
         />
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-      </DialogActions>
     </Dialog>
   );
 }

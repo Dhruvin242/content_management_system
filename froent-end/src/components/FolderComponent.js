@@ -57,6 +57,7 @@ const FolderComponent = () => {
           childFiles.map((files) => (
             <div className="card-box" key={files?._id}>
               <Grid item key={files?._id}>
+                <div className="file-card-wrapper">
                 <FileCard
                   type={files?.type}
                   imageURL={files?.url}
@@ -64,7 +65,9 @@ const FolderComponent = () => {
                   fileID={files?._id}
                   title={files?.name}
                   isHide={files?.isHide}
+                  SharedWith={files?.SharedWith}
                 />
+                </div>
               </Grid>
             </div>
           ))

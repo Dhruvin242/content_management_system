@@ -23,8 +23,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { capitalize, TextField } from "@mui/material";
 import Menu from "@mui/material/Menu";
-import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
+import Avatar from "@mui/material/Avatar";
+import AvatarGroup from "@mui/material/AvatarGroup";
 
 import "./style.css";
 import { ThemeProvider } from "@emotion/react";
@@ -103,7 +103,10 @@ export default function BasicCard(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Card className="main-wrapper" sx={{width : 220 , borderRadius : "12px" , minHeight : 215}}>
+      <Card
+        className="main-wrapper"
+        sx={{ width: 220, borderRadius: "12px", minHeight: 215 }}
+      >
         {Respose && (
           <ResponsiveDialog
             setResponse={setResponse}
@@ -147,14 +150,27 @@ export default function BasicCard(props) {
                 defaultValue={props.title}
               />
             ) : (
-              <Typography sx={{textTransform : "capitalize"}} variant="subtitle2" color="black" component="span">
+              <Typography
+                sx={{ textTransform: "capitalize" }}
+                variant="subtitle2"
+                color="black"
+                component="span"
+              >
                 {props.title}
               </Typography>
             )}
             <br />
-            <Typography variant="caption" sx={{color:"gray" , pt:"3"}} color="black" component="span">
-            {props.foldercreatedAt.substr(0, props.foldercreatedAt.search("T"))}
-              </Typography>
+            <Typography
+              variant="caption"
+              sx={{ color: "gray", pt: "3" }}
+              color="black"
+              component="span"
+            >
+              {props.foldercreatedAt.substr(
+                0,
+                props.foldercreatedAt.search("T")
+              )}
+            </Typography>
           </Typography>
         </CardContent>
         <Menu
@@ -211,13 +227,6 @@ export default function BasicCard(props) {
             Hide
           </MenuItem>
         </Menu>
-        <div className="card-footer">
-        <AvatarGroup max={2}>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-      <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-      <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-    </AvatarGroup>
-    </div>
       </Card>
     </ThemeProvider>
   );

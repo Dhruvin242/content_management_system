@@ -26,6 +26,8 @@ import ResponsiveDialog from "./resposeDialog";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import { ThemeProvider } from "@emotion/react";
+import { Avatar, AvatarGroup } from "@mui/material";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 export default function FileCard(props) {
   const theme = createTheme({
@@ -51,9 +53,10 @@ export default function FileCard(props) {
       dispatch(setCurrentFolder("root"));
     }
   }, [pathname]);
-  const { user } = useSelector(
+  const { user, userFiles } = useSelector(
     (state) => ({
       user: state.user.user,
+      userFiles: state.fileFolders?.userFiles,
     }),
     shallowEqual
   );
@@ -148,14 +151,10 @@ export default function FileCard(props) {
                     />
                   )}
                   {props.type === "text/plain" && (
-                    <IconButton
-                      aria-label="share"
-                      size="small"
+                    <InsertDriveFileIcon
                       color="secondary"
-                      onClick={() => handleFileEdit(props.fileID)}
-                    >
-                      <EditIcon sx={{ fontSize: 35 }} />
-                    </IconButton>
+                      sx={{ fontSize: 35 }}
+                    />
                   )}
                   {props.type === "application/zip" && (
                     <IconButton
@@ -188,11 +187,23 @@ export default function FileCard(props) {
           </div>
           <CardContent>
             <Typography variant="body2" color="text.secondary" component="span">
-              <Typography variant="h6" color="black" component="span">
+              <Typography
+                sx={{ textTransform: "capitalize" }}
+                variant="subtitle2"
+                color="black"
+                component="span"
+              >
                 {props.title}
               </Typography>
               <br />
-              {props.filecreatedAt.substr(0, props.filecreatedAt.search("T"))}
+              <Typography
+                variant="caption"
+                sx={{ color: "gray", pt: "3" }}
+                color="black"
+                component="span"
+              >
+                {props.filecreatedAt.substr(0, props.filecreatedAt.search("T"))}
+              </Typography>
             </Typography>
           </CardContent>
           <Menu
@@ -236,6 +247,12 @@ export default function FileCard(props) {
               </ListItemIcon>
               Share
             </MenuItem>
+            <MenuItem onClick={() => handleFileEdit(props.fileID)}>
+              <ListItemIcon>
+                <EditIcon fontSize="small" />
+              </ListItemIcon>
+              Edit
+            </MenuItem>
             <MenuItem onClick={handledelete}>
               <ListItemIcon>
                 <DeleteIcon fontSize="small" />
@@ -249,6 +266,20 @@ export default function FileCard(props) {
               Hide
             </MenuItem>
           </Menu>
+          {props?.SharedWith?.length > 0 && (
+            <div className="card-footer">
+              <AvatarGroup max={3}>
+                {props?.SharedWith?.length > 0 &&
+                  props.SharedWith.map((name) => (
+                    <Avatar
+                      alt={name}
+                      key={name}
+                      src="/static/images/avatar/1.jpg"
+                    />
+                  ))}
+              </AvatarGroup>
+            </div>
+          )}
         </Card>
       </React.Fragment>
     </ThemeProvider>

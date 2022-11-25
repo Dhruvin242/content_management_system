@@ -7,6 +7,8 @@ import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { shareFileEdit } from "../redux/Slice/shareSlice";
 import DisplayAlert from "./alert";
+import JoditEditor from "jodit-react";
+
 const FileEdit = () => {
   const { fileId } = useParams();
 
@@ -46,6 +48,7 @@ const FileEdit = () => {
       newdata: content,
     };
     const token = user.token;
+    console.log(content);
     dispatch(shareFileEdit({ body, token, fileId }));
   };
 
@@ -67,9 +70,11 @@ const FileEdit = () => {
           horizontal="right"
         ></DisplayAlert>
       )}
-      <h1>File Edit here</h1>
+      <div className="heading">
+        <h1>File Edit here</h1>
+      </div>
 
-      <TextareaAutosize
+      {/* <TextareaAutosize
         id="updatedContent"
         aria-label="minimum height"
         minRows={10}
@@ -81,20 +86,30 @@ const FileEdit = () => {
         onChange={(e) => {
           setContent(e.target.value);
         }}
-      />
+      /> */}
+      <div className="editor">
+        <JoditEditor
+          value={content}
+          tabIndex={1} // tabIndex of textarea
+          onChange={(newContent) => {
+            setContent(newContent);
+          }}
+        />
 
-      <Grid alignItems="center">
-        <Button
-          sx={{ m: 3, px: 10 }}
-          variant="contained"
-          component="label"
-          startIcon={<CloudUploadIcon />}
-          disabled={pre === content}
-          onClick={handleSave}
-        >
-          Save
-        </Button>
-      </Grid>
+        <Grid alignItems="center">
+          
+          <Button
+            sx={{mt : 5, px: 10 }}
+            variant="contained"
+            component="label"
+            startIcon={<CloudUploadIcon />}
+            disabled={pre === content}
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+        </Grid>
+      </div>
     </Fragment>
   );
 };
