@@ -24,8 +24,9 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <div className="abc">
-      <AppBar position="fixed">
+    <div className="">
+      
+      <AppBar position="fixed" sx={{ backgroundColor : "#ff8100"}}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <ArticleIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -100,6 +101,7 @@ function ResponsiveAppBar() {
           </Toolbar>
         </Container>
       </AppBar>
+      
     </div>
   );
 }

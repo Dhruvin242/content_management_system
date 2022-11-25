@@ -111,61 +111,73 @@ export default function FileCard(props) {
         {shareRes && (
           <ShareDialog setShareRes={setShareRes} fileName={props.title} />
         )}
-        <Card sx={props.sx}>
+        <Card sx={{ minHeight: 155 }}>
           <div className="cardWrapper">
             <CardHeader
               title={
-                <Typography variant="body2" color="text.secondary">
-                  {props.type.startsWith("image") && (
-                    <IconButton
-                      aria-label="share"
-                      size="small"
-                      color="secondary"
-                      onClick={() => handleImagePreviewOpen(props.imageURL)}
-                    >
-                      <ImageIcon sx={{ fontSize: 35 }} />
-                    </IconButton>
-                  )}
-                  {ImagePreview && (
-                    <FilePreview
-                      documentName={props.title}
-                      imageURL={props.imageURL}
-                      setImagePreview={setImagePreview}
-                    />
-                  )}
-                  {props.type === "application/pdf" && (
-                    <IconButton
-                      aria-label="share"
-                      size="small"
-                      color="secondary"
-                      onClick={() => handlePdfPreview(props.imageURL)}
-                    >
-                      <PictureAsPdfIcon sx={{ fontSize: 35 }} />
-                    </IconButton>
-                  )}
-                  {PSDPreview && (
-                    <PDFPreview
-                      documentName={props.title}
-                      imageURL={props.imageURL}
-                      setPDFPreview={setPDFPreview}
-                    />
-                  )}
-                  {props.type === "text/plain" && (
-                    <InsertDriveFileIcon
-                      color="secondary"
-                      sx={{ fontSize: 35 }}
-                    />
-                  )}
-                  {props.type === "application/zip" && (
-                    <IconButton
-                      aria-label="share"
-                      size="small"
-                      color="secondary"
-                    >
-                      <FolderZipIcon sx={{ fontSize: 35 }} />
-                    </IconButton>
-                  )}
-                </Typography>
+                <div>
+                  <Typography variant="body2" color="text.secondary">
+                    {props.type.startsWith("image") && (
+                      <IconButton
+                        aria-label="share"
+                        size="small"
+                        color="secondary"
+                        onClick={() => handleImagePreviewOpen(props.imageURL)}
+                      >
+                        <ImageIcon sx={{ fontSize: 40 }} />
+                      </IconButton>
+                    )}
+                    {ImagePreview && (
+                      <FilePreview
+                        documentName={props.title}
+                        imageURL={props.imageURL}
+                        setImagePreview={setImagePreview}
+                      />
+                    )}
+                    {props.type === "application/pdf" && (
+                      <IconButton
+                        aria-label="share"
+                        size="small"
+                        color="secondary"
+                        onClick={() => handlePdfPreview(props.imageURL)}
+                      >
+                        <PictureAsPdfIcon sx={{ fontSize: 40 }} />
+                      </IconButton>
+                    )}
+                    {PSDPreview && (
+                      <PDFPreview
+                        documentName={props.title}
+                        imageURL={props.imageURL}
+                        setPDFPreview={setPDFPreview}
+                      />
+                    )}
+
+                    {props.type === "text/plain" && (
+                      <InsertDriveFileIcon
+                        color="secondary"
+                        sx={{ fontSize: 40 }}
+                      />
+                    )}
+
+                    {props.type === "application/zip" && (
+                      <IconButton
+                        aria-label="share"
+                        size="small"
+                        color="secondary"
+                      >
+                        <FolderZipIcon sx={{ fontSize: 40 }} />
+                      </IconButton>
+                    )}
+                  </Typography>
+                  <Typography
+                    sx={{ textTransform: "capitalize" }}
+                    variant="subtitle2"
+                    color="black"
+                    component="span"
+                  >
+                    {props.title}
+                  </Typography>
+                </div>
               }
             />
 
@@ -185,27 +197,6 @@ export default function FileCard(props) {
               </IconButton>
             </CardActions>
           </div>
-          <CardContent>
-            <Typography variant="body2" color="text.secondary" component="span">
-              <Typography
-                sx={{ textTransform: "capitalize" }}
-                variant="subtitle2"
-                color="black"
-                component="span"
-              >
-                {props.title}
-              </Typography>
-              <br />
-              <Typography
-                variant="caption"
-                sx={{ color: "gray", pt: "3" }}
-                color="black"
-                component="span"
-              >
-                {props.filecreatedAt.substr(0, props.filecreatedAt.search("T"))}
-              </Typography>
-            </Typography>
-          </CardContent>
           <Menu
             anchorEl={anchorEl}
             id="account-menu"

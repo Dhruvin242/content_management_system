@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../api";
 import { resFileStatus, shareFileEdit } from "./shareSlice";
 
+
+
 const initialState = {
   isLoading: true,
   currentFolder: "root",

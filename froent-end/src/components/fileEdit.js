@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useState } from "react";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { Button, Grid } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useParams } from "react-router-dom";
@@ -8,8 +7,9 @@ import axios from "axios";
 import { shareFileEdit } from "../redux/Slice/shareSlice";
 import DisplayAlert from "./alert";
 import JoditEditor from "jodit-react";
+import DashboardComponent from "./dashbordNavbar";
 
-const FileEdit = () => {
+const FileEdit = (props) => {
   const { fileId } = useParams();
 
   const { file, user, error, message } = useSelector(
@@ -32,6 +32,8 @@ const FileEdit = () => {
     return editFile;
   };
 
+  const [{ name }] = getFile();
+
   const FetchText = async () => {
     const editFile = getFile();
     const res = await axios.get(`${editFile[0].url}`);
@@ -48,7 +50,6 @@ const FileEdit = () => {
       newdata: content,
     };
     const token = user.token;
-    console.log(content);
     dispatch(shareFileEdit({ body, token, fileId }));
   };
 
@@ -70,36 +71,24 @@ const FileEdit = () => {
           horizontal="right"
         ></DisplayAlert>
       )}
+      <DashboardComponent />
       <div className="heading">
-        <h1>File Edit here</h1>
+        <h3 className="file-title">{name} - File Edit here</h3>
       </div>
 
-      {/* <TextareaAutosize
-        id="updatedContent"
-        aria-label="minimum height"
-        minRows={10}
-        style={{
-          width: 800,
-          textAlign: "left",
-        }}
-        value={content}
-        onChange={(e) => {
-          setContent(e.target.value);
-        }}
-      /> */}
       <div className="editor">
         <JoditEditor
           value={content}
-          tabIndex={1} // tabIndex of textarea
+          tabIndex={1}
           onChange={(newContent) => {
             setContent(newContent);
           }}
         />
 
+        {/* {console.log(pre , content)} */}
         <Grid alignItems="center">
-          
           <Button
-            sx={{mt : 5, px: 10 }}
+            sx={{ mt: 5, px: 10 }}
             variant="contained"
             component="label"
             startIcon={<CloudUploadIcon />}

@@ -3,7 +3,6 @@ import { createTheme } from "@mui/material/styles";
 import ResponsiveDialog from "./resposeDialog";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import FolderIcon from "@mui/icons-material/Folder";
 import IconButton from "@mui/material/IconButton";
@@ -21,10 +20,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import { capitalize, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import Menu from "@mui/material/Menu";
-import Avatar from "@mui/material/Avatar";
-import AvatarGroup from "@mui/material/AvatarGroup";
 
 import "./style.css";
 import { ThemeProvider } from "@emotion/react";
@@ -44,6 +41,7 @@ export default function BasicCard(props) {
   const [Respose, setResponse] = React.useState(false);
   const [Editable, setEditable] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [visible, setvisible] = React.useState(false);
   const open = Boolean(anchorEl);
 
   const { user } = useSelector(
@@ -67,9 +65,9 @@ export default function BasicCard(props) {
     setAnchorEl(null);
   };
 
-  const handleFolderOpen = (folder) => {
-    dispatch(setCurrentFolder(folder));
-    navigate(`/dashboard/folder/${folder}`);
+  const handleFolderOpen = (name) => {
+    dispatch(setCurrentFolder(name));
+    navigate(`/dashboard/folder/${name}`);
   };
 
   const handledelete = () => {
@@ -105,7 +103,7 @@ export default function BasicCard(props) {
     <ThemeProvider theme={theme}>
       <Card
         className="main-wrapper"
-        sx={{ width: 220, borderRadius: "12px", minHeight: 215 }}
+        sx={{ width: 220, borderRadius: "12px", minHeight: 155 }}
       >
         {Respose && (
           <ResponsiveDialog
@@ -117,13 +115,39 @@ export default function BasicCard(props) {
         <div className="cardWrapper">
           <CardHeader
             title={
-              <IconButton
-                aria-label="share"
-                size="small"
-                onClick={() => handleFolderOpen(props.folderID)}
-              >
-                <FolderIcon sx={{ fontSize: 35 }} color="secondary" />
-              </IconButton>
+              <>
+                <IconButton
+                  aria-label="share"
+                  size="small"
+                  onClick={() => handleFolderOpen(props.title)}
+                >
+                  <FolderIcon sx={{ fontSize: 40 }} color="secondary" />
+                </IconButton>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  component="span"
+                >
+                  {Editable ? (
+                    <TextField
+                      onKeyPress={RenameHandle}
+                      required
+                      id="outlined-required"
+                      label="Required"
+                      defaultValue={props.title}
+                    />
+                  ) : (
+                    <Typography
+                      sx={{ textTransform: "capitalize" }}
+                      variant="subtitle2"
+                      color="black"
+                      component="span"
+                    >
+                      {props.title}
+                    </Typography>
+                  )}
+                </Typography>
+              </>
             }
           />
           <CardActions disableSpacing>
@@ -139,40 +163,6 @@ export default function BasicCard(props) {
             </IconButton>
           </CardActions>
         </div>
-        <CardContent>
-          <Typography variant="body2" color="text.secondary" component="span">
-            {Editable ? (
-              <TextField
-                onKeyPress={RenameHandle}
-                required
-                id="outlined-required"
-                label="Required"
-                defaultValue={props.title}
-              />
-            ) : (
-              <Typography
-                sx={{ textTransform: "capitalize" }}
-                variant="subtitle2"
-                color="black"
-                component="span"
-              >
-                {props.title}
-              </Typography>
-            )}
-            <br />
-            <Typography
-              variant="caption"
-              sx={{ color: "gray", pt: "3" }}
-              color="black"
-              component="span"
-            >
-              {props.foldercreatedAt.substr(
-                0,
-                props.foldercreatedAt.search("T")
-              )}
-            </Typography>
-          </Typography>
-        </CardContent>
         <Menu
           anchorEl={anchorEl}
           id="account-menu"

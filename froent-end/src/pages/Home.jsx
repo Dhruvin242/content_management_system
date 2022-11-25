@@ -11,9 +11,11 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <div className="home-pages-wrapper">
+      <div className="bg-home">
       <ResponsiveAppBar />
-      <h1>WelCome To Content Management System</h1>
+      <h2>WelCome To Content Management System</h2>
+      </div>
     </div>
   );
 };

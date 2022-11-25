@@ -95,6 +95,7 @@ export const SignIn = () => {
   };
 
   return (
+    <div className="login-page-wrapper">
     <ThemeProvider theme={theme}>
       {userState.error && (
         <DisplayAlert
@@ -114,6 +115,7 @@ export const SignIn = () => {
       )}
       
       <Container component="main" maxWidth="xs">
+      <div className="login-body">
         <CssBaseline />
         <Box
           sx={{
@@ -186,8 +188,7 @@ export const SignIn = () => {
                 <Button
                   fullWidth
                   variant="contained"
-                  color="secondary"
-                  sx={{ my: 1 }}
+                  sx={{ backgroundColor : "#ff8100"}}
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
                 >
@@ -201,21 +202,23 @@ export const SignIn = () => {
             />
 
             <Grid container>
-              <Grid item xs>
+              <Grid item xs sx={{mt : 1}}>
                 <Link href="/reset-password" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/register" variant="body2">
+                <Link  href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Copyright sx={{ pb : 2 ,pt:2 }} />
+        </div>
       </Container>
     </ThemeProvider>
+    </div>
   );
 };

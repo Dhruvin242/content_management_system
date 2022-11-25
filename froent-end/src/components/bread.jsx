@@ -29,7 +29,7 @@ const Breadcrumb = () => {
           return isLast ? (
             <Typography key={name}>{name}</Typography>
           ) : (
-            <Link key={name} onClick={() => navigate(routeTo)}>
+            <Link sx={{color : 'black', textDecorationLine:"none"  }} key={name} onClick={() => navigate(routeTo)}>
               {name}
             </Link>
           );

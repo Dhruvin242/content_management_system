@@ -77,7 +77,6 @@ export default function PrimarySearchAppBar() {
                       title={files?.name}
                       isHide={files?.isHide}
                       SharedWith={files?.SharedWith}
-                      sx={{ width: 220 }}
                     />
                   </Grid>
                 </div>
