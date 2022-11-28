@@ -14,7 +14,7 @@ const Home = () => {
     <div className="home-pages-wrapper">
       <div className="bg-home">
       <ResponsiveAppBar />
-      <h2>WelCome To Content Management System</h2>
+      <h2>Welcome To Content Management System</h2>
       </div>
     </div>
   );

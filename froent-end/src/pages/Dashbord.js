@@ -33,7 +33,6 @@ export default function PrimarySearchAppBar() {
           direction="row"
           justify="center"
           columnGap="20px"
-          // style={{ minHeight: "100vh" }}
         >
           {userFolder?.length === 0 && userFiles?.length === 0 && (
             <Grid container direction="column" alignItems="center">

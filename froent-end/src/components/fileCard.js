@@ -183,7 +183,7 @@ export default function FileCard(props) {
 
             <CardActions disableSpacing>
               <IconButton href={downloadURL}>
-                <DownloadIcon />
+                <DownloadIcon sx={{ ml: "14px" }} />
               </IconButton>
               <IconButton
                 onClick={handleClick}
@@ -193,7 +193,7 @@ export default function FileCard(props) {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
-                <MoreVertIcon />
+                <MoreVertIcon sx={{ mt: "10px" }} />
               </IconButton>
             </CardActions>
           </div>

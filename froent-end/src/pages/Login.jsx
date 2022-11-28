@@ -49,11 +49,9 @@ export const SignIn = () => {
     formState: { errors },
   } = useForm();
 
-  const { userState, message, error } = useSelector(
+  const { userState } = useSelector(
     (state) => (
       { userState: state.user }
-      // { message: state.user.message },
-      // { error: state.user.error }
     ),
     shallowEqual
   );
@@ -215,7 +213,7 @@ export const SignIn = () => {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ pb : 2 ,pt:2 }} />
+        <Copyright sx={{ pb : 1 ,pt:1 , }} />
         </div>
       </Container>
     </ThemeProvider>

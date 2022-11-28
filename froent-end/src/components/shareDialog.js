@@ -8,24 +8,38 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { TextField } from "@mui/material";
+import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { shareFile } from "../redux/Slice/shareSlice";
-import DisplayAlert from "../components/alert";
 
 export default function ShareDialog(props) {
   const dispatch = useDispatch();
-  const { data, user,message } = useSelector(
+  const { data, user } = useSelector(
     (state) => ({
       data: state.fileFolders.userFiles,
       user: state.user.user,
-      message : state.shareFiles
     }),
     shallowEqual
   );
   const [open, setOpen] = React.useState(true);
   const [userEmail, setUser] = React.useState("");
+  const [readchecked, setreadChecked] = React.useState(true);
+  const [editchecked, seteditChecked] = React.useState(false);
+  const [permission, setpermission] = React.useState("read");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleChangePermission = (event) => {
+    setreadChecked(event.target.checked);
+    if (readchecked) setreadChecked(true);
+    if (editchecked) setreadChecked(true);
+  };
+
+  const handleEditChangePermission = (event) => {
+    seteditChecked(event.target.checked);
+    setpermission("edit");
+
+    if (!editchecked) setreadChecked(event.target.checked);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -47,7 +61,9 @@ export default function ShareDialog(props) {
       receivedUserEmail: userEmail,
       url: newFile[0].url,
       tags: newFile[0].tags,
+      permission,
     };
+
     dispatch(shareFile({ body, token }));
 
     setOpen(false);
@@ -74,6 +90,24 @@ export default function ShareDialog(props) {
             margin="dense"
             fullWidth
             variant="standard"
+          />
+          <FormControlLabel
+            label="Read"
+            control={
+              <Checkbox
+                checked={readchecked}
+                onChange={handleChangePermission}
+              />
+            }
+          />
+          <FormControlLabel
+            label="Edit"
+            control={
+              <Checkbox
+                checked={editchecked}
+                onChange={handleEditChangePermission}
+              />
+            }
           />
         </DialogContent>
         <DialogActions>

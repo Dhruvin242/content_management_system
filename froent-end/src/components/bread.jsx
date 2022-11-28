@@ -13,8 +13,8 @@ const Breadcrumb = () => {
     <>
       <div className="grid-switch-wraper">
         <label className="switch">
-          <input type="checkbox" />
-          <span className="slider round"></span>
+          {/* <input type="checkbox" /> */}
+          {/* <span className="slider round"></span> */}
         </label>
       </div>
       <Breadcrumbs  aria-label="breadcrumb">

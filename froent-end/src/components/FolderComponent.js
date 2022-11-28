@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { shallowEqual, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FormDialog from "./card";
 import DashboardComponent from "./dashbordNavbar";
 import Grid from "@mui/material/Grid";
@@ -9,11 +9,13 @@ import FileCard from "./fileCard";
 import { Divider } from "@mui/material";
 
 const FolderComponent = () => {
+  const navigate = useNavigate()
+  const userProfile = localStorage.getItem("profile");
   const { folderId } = useParams();
   const { childFolders, childFiles } = useSelector(
     (state) => ({
       childFolders: state.fileFolders.userFolder.filter(
-        (folder) => folder.path.trim() === folderId.trim()
+        (folder) => folder.path === folderId
       ),
       childFiles: state.fileFolders.userFiles.filter(
         (file) => file.path === folderId
@@ -21,6 +23,10 @@ const FolderComponent = () => {
     }),
     shallowEqual
   );
+
+  if(!userProfile) {
+    navigate("/Login");
+  }
 
   return (
     <Fragment>

@@ -45,6 +45,7 @@ exports.fileUpload = async (req, res, next) => {
       url: secure_url,
       path: req.body.path,
       tags: req.body.tags,
+      permission: "edit",
     });
     return res.status(200).json({
       newFile,

@@ -41,7 +41,6 @@ export default function BasicCard(props) {
   const [Respose, setResponse] = React.useState(false);
   const [Editable, setEditable] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [visible, setvisible] = React.useState(false);
   const open = Boolean(anchorEl);
 
   const { user } = useSelector(
@@ -103,7 +102,7 @@ export default function BasicCard(props) {
     <ThemeProvider theme={theme}>
       <Card
         className="main-wrapper"
-        sx={{ width: 220, borderRadius: "12px", minHeight: 155 }}
+        sx={{ width: 220, borderRadius: "12px", minHeight: 175 }}
       >
         {Respose && (
           <ResponsiveDialog
@@ -159,7 +158,7 @@ export default function BasicCard(props) {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <MoreVertIcon />
+              <MoreVertIcon sx={{ mt: "15px" }} />
             </IconButton>
           </CardActions>
         </div>

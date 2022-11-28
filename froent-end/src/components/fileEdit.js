@@ -9,18 +9,27 @@ import DisplayAlert from "./alert";
 import JoditEditor from "jodit-react";
 import DashboardComponent from "./dashbordNavbar";
 
-const FileEdit = (props) => {
+const FileEdit = () => {
   const { fileId } = useParams();
 
-  const { file, user, error, message } = useSelector(
+  const { file, user, error, message, userFiles } = useSelector(
     (state) => ({
       file: state.fileFolders.userFiles,
       user: state.user.user,
       error: state.fileFolders.error,
       message: state.fileFolders.message,
+      userFiles: state.fileFolders?.userFiles,
     }),
     shallowEqual
   );
+
+  useEffect(() => {
+    if (userFiles[0].permission === "read") {
+      document.getElementById("saveContent").style.visibility = "hidden";
+      const heading = document.getElementById("title");
+      heading.textContent = "You do not have permission to edit this file";
+    }
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -46,11 +55,13 @@ const FileEdit = (props) => {
   }, [dispatch]);
 
   const handleSave = () => {
-    const body = {
-      newdata: content,
-    };
-    const token = user.token;
-    dispatch(shareFileEdit({ body, token, fileId }));
+    if (userFiles[0].permission === "edit") {
+      const body = {
+        newdata: content,
+      };
+      const token = user.token;
+      dispatch(shareFileEdit({ body, token, fileId }));
+    }
   };
 
   return (
@@ -73,7 +84,9 @@ const FileEdit = (props) => {
       )}
       <DashboardComponent />
       <div className="heading">
-        <h3 className="file-title">{name} - File Edit here</h3>
+        <h3 className="file-title" id="title">
+          {name} - File Edit here
+        </h3>
       </div>
 
       <div className="editor">
@@ -85,9 +98,9 @@ const FileEdit = (props) => {
           }}
         />
 
-        {/* {console.log(pre , content)} */}
         <Grid alignItems="center">
           <Button
+            id="saveContent"
             sx={{ mt: 5, px: 10 }}
             variant="contained"
             component="label"

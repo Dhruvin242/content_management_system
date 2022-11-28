@@ -27,6 +27,7 @@ exports.fileShared = async (req, res, next) => {
       url: req.body.url,
       path: "root",
       tags: req.body.tags,
+      permission: req.body.permission,
     });
 
     return res.status(200).json({
@@ -58,6 +59,7 @@ exports.badgeContent = async (req, res, next) => {
 
 exports.fileStatus = async (req, res, next) => {
   try {
+    console.log(req.body)
     const { fileResponse, shareFileName } = req.body;
     const requestShareFile = await FileShare.findOne({
       receivedUserEmail: req.user.email,
@@ -81,6 +83,7 @@ exports.fileStatus = async (req, res, next) => {
           url: req.body.url,
           path: "root",
           tags: req.body.tags,
+          permission: req.body.permission,
         });
 
         requestShareFile.fileStatus = "Approve";
@@ -88,13 +91,8 @@ exports.fileStatus = async (req, res, next) => {
 
         const fileshareupdate = await File.updateOne(
           { name: shareFileName, createdBy: requestShareFile.sharedUserName },
-          { $push: { "SharedWith": req.user.name } }
+          { $push: { SharedWith: req.user.name } }
         );
-
-        // fileshareupdate.SharedWith = req.user.name;
-        // fileshareupdate.save();
-        console.log('lets see output',fileshareupdate)  
-        console.log("=====================================update");
 
         return res.status(200).json({
           newFile,
