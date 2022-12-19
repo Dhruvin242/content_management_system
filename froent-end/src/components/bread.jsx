@@ -17,9 +17,15 @@ const Breadcrumb = () => {
           {/* <span className="slider round"></span> */}
         </label>
       </div>
-      <Breadcrumbs  aria-label="breadcrumb">
+      <Breadcrumbs aria-label="breadcrumb">
         {pathnames.length > 0 ? (
-          <Link sx={{color: "#ff8100" , textDecorationLine:"none"}} onClick={() => navigate("/")}>Home</Link>
+          <Link
+            sx={{ color: "#ff8100", textDecorationLine: "none" }}
+            cursor="pointer"
+            onClick={() => navigate("/")}
+          >
+            Home
+          </Link>
         ) : (
           <Typography> Home </Typography>
         )}
@@ -29,7 +35,11 @@ const Breadcrumb = () => {
           return isLast ? (
             <Typography key={name}>{name}</Typography>
           ) : (
-            <Link sx={{color : 'black', textDecorationLine:"none"  }} key={name} onClick={() => navigate(routeTo)}>
+            <Link
+              sx={{ color: "black", textDecorationLine: "none" }}
+              key={name}
+              onClick={() => navigate(routeTo)}
+            >
               {name}
             </Link>
           );

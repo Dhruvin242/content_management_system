@@ -2,7 +2,6 @@ import * as React from "react";
 import { createTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
@@ -10,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { hideDocument, setCurrentFolder } from "../redux/Slice/fileFolderSlice";
+import { hideDocument, setCurrentFolder, UnhideDocument } from "../redux/Slice/fileFolderSlice";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -28,6 +27,7 @@ import Menu from "@mui/material/Menu";
 import { ThemeProvider } from "@emotion/react";
 import { Avatar, AvatarGroup } from "@mui/material";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function FileCard(props) {
   const theme = createTheme({
@@ -86,15 +86,18 @@ export default function FileCard(props) {
   const handleshare = () => {
     setShareRes(true);
   };
-  const handlehide = () => {
+  const handlehide = (isHide) => {
     const body = {
       folder: props.fileID,
     };
     const token = user.token;
-    dispatch(hideDocument({ body, token }));
+    console.log(isHide);
+    !isHide ? dispatch(hideDocument({ body, token })) : dispatch(UnhideDocument({ body, token }));
+    
   };
 
-  const downloadURL = `https://res.cloudinary.com/dh2o42cij/raw/upload/fl_attachment:${
+
+  const downloadURL = `https://res.cloudinary.com/dh2o42cij/image/upload/fl_attachment:${
     props.title.split(".")[0]
   }/Files/${props.title.split(".")[0]}`;
 
@@ -111,7 +114,7 @@ export default function FileCard(props) {
         {shareRes && (
           <ShareDialog setShareRes={setShareRes} fileName={props.title} />
         )}
-        <Card sx={{ minHeight: 155 }}>
+        <Card sx={{ minHeight: 175 }}>
           <div className="cardWrapper">
             <CardHeader
               title={
@@ -250,11 +253,15 @@ export default function FileCard(props) {
               </ListItemIcon>
               Delete
             </MenuItem>
-            <MenuItem onClick={handlehide}>
+            <MenuItem onClick={() => handlehide(props.isHide)}>
               <ListItemIcon>
-                <VisibilityOffIcon fontSize="small" />
+                {!props.isHide ? (
+                  <VisibilityOffIcon fontSize="small" />
+                ) : (
+                  <VisibilityIcon fontSize="small" />
+                )}
               </ListItemIcon>
-              Hide
+              {!props.isHide ? "Hide" : "Un-Hide"}
             </MenuItem>
           </Menu>
           {props?.SharedWith?.length > 0 && (

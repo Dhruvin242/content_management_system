@@ -8,7 +8,7 @@ import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
 import FolderComponent from "./components/FolderComponent";
 import FileEdit from "./components/fileEdit";
-import CircularStatic from "./components/fileUploadProcess";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
 
@@ -30,7 +30,7 @@ const App = () => {
             />
           <Route path="/dashboard/*" element={<PrimarySearchAppBar />} />
           <Route path="/file/:fileId" element={<FileEdit />} />
-          <Route path="/temp" element={<CircularStatic />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

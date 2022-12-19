@@ -172,6 +172,36 @@ export const hideDocument = createAsyncThunk(
   }
 );
 
+export const UnhideDocument = createAsyncThunk(
+  "fileFolders/UnhideDocument",
+  async ({ body, token }, { rejectWithValue }) => {
+    try {
+      const response = await api.UnhideFileFolderAPI(body, token);
+      if (response.status === 200) {
+        try {
+          const getAfterDelete = await api.GetFoldersAPI(token);
+          if (getAfterDelete.status === 200) {
+            try {
+              const foldersData = getAfterDelete.data;
+              const filesGet = await api.GetFilesAPI(token);
+              return [filesGet.data, foldersData];
+            } catch (error) {
+              console.log("error", error);
+              return rejectWithValue(error);
+            }
+          }
+        } catch (error) {
+          console.log("error", error);
+          return rejectWithValue(error);
+        }
+      }
+    } catch (error) {
+      console.log("error", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const fileFolderSlice = createSlice({
   name: "fileFolders",
   initialState,
@@ -285,6 +315,20 @@ const fileFolderSlice = createSlice({
       state.message = "Hide Successfully";
     });
     builder.addCase(hideDocument.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.response.data.message;
+    });
+    builder.addCase(UnhideDocument.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(UnhideDocument.fulfilled, (state, action) => {
+      console.log('action',action)
+      state.isLoading = false;
+      state.userFolder = action.payload[1].data;
+      state.userFiles = action.payload[0].data.files;
+      state.message = "Unhide Successfully";
+    });
+    builder.addCase(UnhideDocument.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload.response.data.message;
     });

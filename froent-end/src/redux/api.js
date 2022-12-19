@@ -64,6 +64,11 @@ export const hideFileFolderAPI = (body, token) => {
   return authAxios(token).post(`/api/v1/file/hide`, body);
 };
 
+export const UnhideFileFolderAPI = (body, token) => {
+  console.log(body)
+  return authAxios(token).post(`/api/v1/user/unHide`, body);
+};
+
 export const searchDocumentAPI = (body, token) => {
   return authAxios(token).get(`/api/v1/file/search/${body.searchWord}`);
 };

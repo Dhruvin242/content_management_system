@@ -49,6 +49,10 @@ border-radius: 12px !;
     border-bottom-right-radius: 12px;
 }
 
+.card-box .css-1fuesak-MuiPaper-root-MuiCard-root{
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
 
 .card-footer{
     background: #b3b3b336;

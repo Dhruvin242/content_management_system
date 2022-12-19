@@ -6,6 +6,7 @@
     flex-direction: row-reverse;
     align-items: center;
     padding: 10px 35px;
+    cursor: pointer;
 }
 
 .navbar-wrapper {
@@ -86,3 +87,11 @@
     border-radius: 50%;
   }
   
+  .main{
+    display: flex;
+    justify-content: center;
+  }
+
+  .hindCompoent .navbar-wrapper {
+    display: none;
+  }
