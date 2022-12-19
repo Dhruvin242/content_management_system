@@ -8,9 +8,9 @@ import { ResetPasswordChange } from "./pages/reset-passwordChange";
 import PrimarySearchAppBar from "./pages/Dashbord";
 import FolderComponent from "./components/FolderComponent";
 import FileEdit from "./components/fileEdit";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
-  const userProfile = localStorage.getItem("profile");
 
   return (
     <div className="App">
@@ -24,14 +24,13 @@ const App = () => {
             path="/reset-password/change-password/:token"
             element={<ResetPasswordChange />}
           />
-          <Route path="/dashboard/*" element={<PrimarySearchAppBar />} />
-          {userProfile && (
             <Route
               path="/dashboard/folder/:folderId"
               element={<FolderComponent />}
             />
-          )}
+          <Route path="/dashboard/*" element={<PrimarySearchAppBar />} />
           <Route path="/file/:fileId" element={<FileEdit />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

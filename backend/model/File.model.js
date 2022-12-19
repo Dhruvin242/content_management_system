@@ -49,6 +49,9 @@ const fileSchema = new mongoose.Schema({
   SharedWith: {
     type: [String],
   },
+  permission: {
+    type: String,
+  },
 });
 
 const Folder = mongoose.model("File", fileSchema);

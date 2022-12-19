@@ -14,10 +14,12 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ChipInput from "material-ui-chip-input";
+import CircularIndeterminate from "./fileUploadProcess";
 
 export default function FormDialog() {
   const { error } = useSelector((state) => ({ ...state.fileFolders }));
   const { message } = useSelector((state) => ({ ...state.fileFolders }));
+  const { isLoading } = useSelector((state) => ({ ...state.fileFolders }));
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [Fileopen, setFileOpen] = React.useState(false);
@@ -86,7 +88,6 @@ export default function FormDialog() {
       },
     };
     dispatch(uploadFile({ data, config }));
-    setFileOpen(false);
   };
 
   const handleFileUpload = (e) => {
@@ -128,27 +129,27 @@ export default function FormDialog() {
           horizontal="right"
         ></DisplayAlert>
       )}
- 
- <div className="button-circle-wrap">
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: "absolute", bottom: 50, right: 20}}
-        icon={<SpeedDialIcon />}
-      >
-        <SpeedDialAction
-          key="Create Folder"
-          icon={<FolderOpenIcon  sx={{color : "white"}}/>}
-          tooltipTitle="Create Folder"
-          onClick={handleClickOpen}
-        />
 
-        <SpeedDialAction
-          key="Upload File"
-          icon={<UploadFileIcon sx={{color : "white"}} />}
-          tooltipTitle="Upload File"
-          onClick={handleClickFileOpen}
-        />
-      </SpeedDial>
+      <div className="button-circle-wrap">
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: "absolute", bottom: 50, right: 20 }}
+          icon={<SpeedDialIcon />}
+        >
+          <SpeedDialAction
+            key="Create Folder"
+            icon={<FolderOpenIcon sx={{ color: "white" }} />}
+            tooltipTitle="Create Folder"
+            onClick={handleClickOpen}
+          />
+
+          <SpeedDialAction
+            key="Upload File"
+            icon={<UploadFileIcon sx={{ color: "white" }} />}
+            tooltipTitle="Upload File"
+            onClick={handleClickFileOpen}
+          />
+        </SpeedDial>
       </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create Folder</DialogTitle>
@@ -203,6 +204,7 @@ export default function FormDialog() {
           />
         )}
         <DialogActions>
+          {isLoading && <CircularIndeterminate />}
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleFileUpload}>Upload</Button>
         </DialogActions>

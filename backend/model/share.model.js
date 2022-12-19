@@ -59,6 +59,9 @@ const fileShareSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  permission: {
+    type: String,
+  },
 });
 
 const FileShare = mongoose.model("FileShare", fileShareSchema);

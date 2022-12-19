@@ -59,6 +59,7 @@ export default function NotificationSharedFiles(props) {
       shareUser: newFile[0].sharedUserName,
       url: newFile[0].url,
       tags: newFile[0].tags,
+      permission: newFile[0].permission,
     };
     const token = user.token;
     dispatch(resFileStatus({ body, token }));

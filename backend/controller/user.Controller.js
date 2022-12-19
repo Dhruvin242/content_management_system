@@ -269,3 +269,21 @@ exports.hideCode = async (req, res, next) => {
     console.log(error);
   }
 };
+
+exports.unhide = async (req, res, next) => {
+  try {
+    const { folder } = req.body;
+
+    const files = await File.findById(folder);
+    files.isHide = false;
+    files.save();
+
+    console.log(files);
+    return res.status(200).json({
+      message: "Unhide was successfully",
+    });
+  } catch (error) {
+    catchResponse(res, 500, "Something went wrong...");
+    console.log(error);
+  }
+};

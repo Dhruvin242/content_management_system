@@ -15,4 +15,11 @@ routes.post(
   UserController.hideCode
 );
 
+routes.post(
+  "/unHide",
+  UserController.protect,
+  UserController.unhide
+);
+
+
 module.exports = routes;
